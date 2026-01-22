@@ -1,0 +1,147 @@
+﻿index,feature_name,description,feature_type,data_range,non_zero_count,coverage_pct
+1,h3_id,Unique id of the hexagon,identification,non-numeric,13677,100
+2,city,Name of the city the cell is in,identification,non-numeric,13677,100
+3,feat_building_count,Number of buildings in hexagon,"morphology, built area",0.00 to 108.00,11596,84.784675
+4,feat_total_footprint_area,Area covered by buildings in cell,"morphology, built area",0.00 to 28577.00,11596,84.784675
+5,feat_mean_building_area,Average building footprint size,"morphology, built area",0.00 to 27564.96,11596,84.784675
+6,feat_std_building_area,SD building footprint size,"morphology, built area",0.00 to 19802.39,11032,80.66
+7,feat_min_building_area,Min building footprint size,"morphology, built area",0.00 to 27564.96,11596,84.784675
+8,feat_max_building_area,Max building footprint size,"morphology, built area",0.00 to 28290.91,11596,84.784675
+9,feat_coverage_ratio,Building footprint coverage ratio,"morphology, built area",0.00 to 2.24,11596,84.784675
+10,feat_small_buildings_ratio,Ratio of small buildings to total (x < 100),"morphology, built area",0.00 to 1.00,11163,81.61877605
+11,feat_large_buildings_ratio,Ratio of large buildings to total (x >= 500),"morphology, built area",0.00 to 1.00,3566,26.07296922
+12,feat_mean_perimeter,Average building perimeter in meters,"morphology, built area",0.00 to 913.37,11596,84.784675
+13,feat_std_perimeter,SD building perimeter in meters,"morphology, built area",0.00 to 652.11,11032,80.66
+14,feat_height_avg,Building height average (of the averages) from 2016 to 2023,height,0.00 to 51.32,11473,83.88535498
+15,feat_height_latest,Building height average from 2023,height,0.00 to 50.99,11312,82.71
+16,feat_height_trend,Building height trend from 2016 to 2023 (mean_height_2023 - mean_height_2016 / number of height columns),height,-3.43 to 8.50,11357,83.03721576
+17,feat_height_max,Building height average from 2016 to 2026,height,0.00 to 59.89,11473,83.88535498
+18,feat_low_rise_ratio_latest,Mean ratio of buildings with height (x < 10) in the cell in 2023,"morphology, built area",0.00 to 1.00,11461,83.79761644
+19,feat_mid_rise_ratio_latest,Mean ratio of buildings with height (x >= 10) & (x < 25) in the cell in 2023,"morphology, built area",0.00 to 1.00,5080,37.14264824
+20,feat_high_rise_ratio_latest,Mean ratio of buildings with height (x >= 25) in the cell in 2023,"morphology, built area",0.00 to 1.00,566,4.13833443
+21,feat_floor_area_ratio_latest,"Floor area ratio per square meter of the cell in 2023
+sum(floors * building_area_m2) / h3_area_m2
+floors = building_height / 3.0 ","morphology, built area",0.00 to 19.22,11312,82.71
+22,feat_high_rise_ratio_mean,Mean count of buildings with height (x >= 25) in the cell averaged across all years,"morphology, built area",0.00 to 0.76,715,5.227754625
+23,feat_floor_area_ratio_mean,Mean count of buildings with height (x < 10) in the cell in 2023,"morphology, built area",0.00 to 22.19,11473,83.88535498
+24,feat_mean_height_2016,Building height averaged per H3 cell (from Google buildings 2.5D) for 2016,height,0.00 to 59.89,11818,86.40783798
+25,feat_floor_area_ratio_2016,Floor area ratio per square meter of the cell in 2016,"morphology, built area",0.00 to 22.18,11818,86.40783798
+26,feat_low_rise_ratio_2016,Ratio of buildings with height (x < 10) in the cell in 2016,"morphology, built area",0.00 to 1.00,12419,90.80207648
+27,feat_mid_rise_ratio_2016,Ratio of buildings with height (x >= 10) & (x < 25) in the cell in 2016,"morphology, built area",0.00 to 1.00,6800,49.71850552
+28,feat_high_rise_ratio_2016,Ratio of buildings with height (x >= 25) in the cell in 2016,"morphology, built area",0.00 to 0.71,5919,43.27703444
+29,feat_mean_height_2017,Building height averaged per H3 cell (from Google buildings 2.5D) for 2017,height,0.00 to 54.15,10685,78.12385757
+30,feat_floor_area_ratio_2017,Floor area ratio per square meter of the cell in 2017,"morphology, built area",0.00 to 25.51,10685,78.12385757
+31,feat_low_rise_ratio_2017,Ratio of buildings with height (x < 10) in the cell in 2017,"morphology, built area",0.00 to 1.00,11556,84.4922132
+32,feat_mid_rise_ratio_2017,Ratio of buildings with height (x >= 10) & (x < 25) in the cell in 2017,"morphology, built area",0.00 to 1.00,1800,13.16078087
+33,feat_high_rise_ratio_2017,Ratio of buildings with height (x >= 25) in the cell in 2017,"morphology, built area",0.00 to 1.00,180,1.316078087
+34,feat_mean_height_2018,Building height averaged per H3 cell (from Google buildings 2.5D) for 2018,height,0.00 to 57.91,10765,78.70878117
+35,feat_floor_area_ratio_2018,Floor area ratio per square meter of the cell in 2018,"morphology, built area",0.00 to 24.04,10765,78.70878117
+36,feat_low_rise_ratio_2018,Ratio of buildings with height (x < 10) in the cell in 2018,"morphology, built area",0.00 to 1.00,11542,84.38985158
+37,feat_mid_rise_ratio_2018,Ratio of buildings with height (x >= 10) & (x < 25) in the cell in 2018,"morphology, built area",0.00 to 1.00,2030,14.84243621
+38,feat_high_rise_ratio_2018,Ratio of buildings with height (x >= 25) in the cell in 2018,"morphology, built area",0.00 to 1.00,191,1.396505082
+39,feat_mean_height_2019,Building height averaged per H3 cell (from Google buildings 2.5D) for 2019,height,0.00 to 50.94,10941,79.99561307
+40,feat_floor_area_ratio_2019,Floor area ratio per square meter of the cell in 2019,"morphology, built area",0.00 to 24.41,10941,79.99561307
+41,feat_low_rise_ratio_2019,Ratio of buildings with height (x < 10) in the cell in 2019,"morphology, built area",0.00 to 1.00,11542,84.38985158
+42,feat_mid_rise_ratio_2019,Ratio of buildings with height (x >= 10) & (x < 25) in the cell in 2019,"morphology, built area",0.00 to 1.00,2356,17.23
+43,feat_high_rise_ratio_2019,Ratio of buildings with height (x >= 25) in the cell in 2019,"morphology, built area",0.00 to 1.00,220,1.608539884
+44,feat_mean_height_2020,Building height averaged per H3 cell (from Google buildings 2.5D) for 2020,height,0.00 to 52.73,11067,80.91686773
+45,feat_floor_area_ratio_2020,Floor area ratio per square meter of the cell in 2020,"morphology, built area",0.00 to 22.92,11067,80.91686773
+46,feat_low_rise_ratio_2020,Ratio of buildings with height (x < 10) in the cell in 2020,"morphology, built area",0.00 to 1.00,11537,84.35329385
+47,feat_mid_rise_ratio_2020,Ratio of buildings with height (x >= 10) & (x < 25) in the cell in 2020,"morphology, built area",0.00 to 1.00,2150,15.7198216
+48,feat_high_rise_ratio_2020,Ratio of buildings with height (x >= 25) in the cell in 2020,"morphology, built area",0.00 to 0.71,219,1.60122834
+49,feat_mean_height_2021,Building height averaged per H3 cell (from Google buildings 2.5D) for 2021,height,0.00 to 49.86,11182,81.7576954
+50,feat_floor_area_ratio_2021,Floor area ratio per square meter of the cell in 2021,"morphology, built area",0.00 to 21.83,11182,81.7576954
+51,feat_low_rise_ratio_2021,Ratio of buildings with height (x < 10) in the cell in 2021,"morphology, built area",0.00 to 1.00,11543,84.39716312
+52,feat_mid_rise_ratio_2021,Ratio of buildings with height (x >= 10) & (x < 25) in the cell in 2021,"morphology, built area",0.00 to 1.00,2143,15.66864078
+53,feat_high_rise_ratio_2021,Ratio of buildings with height (x >= 25) in the cell in 2021,"morphology, built area",0.00 to 1.00,252,1.842509322
+54,feat_mean_height_2022,Building height averaged per H3 cell (from Google buildings 2.5D) for 2022,height,0.00 to 54.50,11256,82.29874973
+55,feat_floor_area_ratio_2022,Floor area ratio per square meter of the cell in 2022,"morphology, built area",0.00 to 17.40,11256,82.29874973
+56,feat_low_rise_ratio_2022,Ratio of buildings with height (x < 10) in the cell in 2022,"morphology, built area",0.00 to 1.00,11489,84.00233969
+57,feat_mid_rise_ratio_2022,Ratio of buildings with height (x >= 10) & (x < 25) in the cell in 2022,"morphology, built area",0.00 to 1.00,4424,32.34627477
+58,feat_high_rise_ratio_2022,Ratio of buildings with height (x >= 25) in the cell in 2022,"morphology, built area",0.00 to 1.00,452,3.304818308
+59,feat_mean_height_2023,Building height averaged per H3 cell (from Google buildings 2.5D) for 2023,height,0.00 to 50.99,11312,82.71
+60,feat_floor_area_ratio_2023,Floor area ratio per square meter of the cell in 2023,"morphology, built area",0.00 to 19.22,11312,82.71
+61,feat_low_rise_ratio_2023,Ratio of buildings with height (x < 10) in the cell in 2023,"morphology, built area",0.00 to 1.00,11461,83.79761644
+62,feat_mid_rise_ratio_2023,Ratio of buildings with height (x >= 10) & (x < 25) in the cell in 2023,"morphology, built area",0.00 to 1.00,5080,37.14264824
+63,feat_high_rise_ratio_2023,Ratio of buildings with height (x >= 25) in the cell in 2023,"morphology, built area",0.00 to 1.00,566,4.13833443
+64,feat_ndbi_2023_mean,Normalized Difference Built-up Index (built-up area intensity),spectral,-0.61 to 0.21,13625,99.61979966
+65,feat_savi_2023_mean,Soil Adjusted Vegetation Index (vegetation density),spectral,-0.00 to 0.67,13627,99.63442275
+66,feat_poi_commercial_count,Point of Interest classified as 'commercial' count,points of interest,0.00 to 28.00,2137,15.62477151
+67,feat_poi_education_count,Point of Interest classified as 'education' count,points of interest,0.00 to 5.00,696,5.088835271
+68,feat_poi_health_count,Point of Interest classified as 'health' count,points of interest,0.00 to 8.00,221,1.615851429
+69,feat_poi_industrial_count,Point of Interest classified as 'industrial' count,points of interest,0.00 to 6.00,451,3.297506763
+70,feat_poi_office_count,Point of Interest classified as 'office' count,points of interest,0.00 to 13.00,462,3.377933757
+71,feat_poi_office_commercial_mixed_count,Point of Interest classified as 'office_commercial_mixed' count,points of interest,0.00 to 35.00,134,0.979747021
+72,feat_poi_other_count,Point of Interest classified as 'other' count,points of interest,0.00 to 24.00,2192,16.02690649
+73,feat_poi_religion_count,Point of Interest classified as 'religion' count,points of interest,0.00 to 2.00,364,2.661402354
+74,feat_poi_residential_count,Point of Interest classified as 'residential' count,points of interest,0.00 to 3.00,100,0.731154493
+75,feat_poi_commercial_existence_sum,Point of Interest classified as 'commercial' confidence score sum,points of interest,0.00 to 24.23,2137,15.62477151
+76,feat_poi_education_existence_sum,Point of Interest classified as 'education' confidence score sum,points of interest,0.00 to 4.36,696,5.088835271
+77,feat_poi_health_existence_sum,Point of Interest classified as 'health' confidence score sum,points of interest,0.00 to 7.49,221,1.615851429
+78,feat_poi_industrial_existence_sum,Point of Interest classified as 'industrial' confidence score sum,points of interest,0.00 to 5.71,451,3.297506763
+79,feat_poi_office_existence_sum,Point of Interest classified as 'office' confidence score sum,points of interest,0.00 to 12.31,462,3.377933757
+80,feat_poi_office_commercial_mixed_existence_sum,Point of Interest classified as 'office_commercial_mixed' confidence score sum,points of interest,0.00 to 33.28,134,0.979747021
+81,feat_poi_other_existence_sum,Point of Interest classified as 'other' confidence score sum,points of interest,0.00 to 21.40,2192,16.02690649
+82,feat_poi_religion_existence_sum,Point of Interest classified as 'religion' confidence score sum,points of interest,0.00 to 1.72,364,2.661402354
+83,feat_poi_residential_existence_sum,Point of Interest classified as 'residential' confidence score sum,points of interest,0.00 to 2.85,100,0.731154493
+84,feat_poi_commercial_existence_mean,Point of Interest classified as 'commercial' confidence score mean,points of interest,0.00 to 1.00,2137,15.62477151
+85,feat_poi_education_existence_mean,Point of Interest classified as 'education' confidence score mean,points of interest,0.00 to 0.99,696,5.088835271
+86,feat_poi_health_existence_mean,Point of Interest classified as 'health' confidence score mean,points of interest,0.00 to 0.99,221,1.615851429
+87,feat_poi_industrial_existence_mean,Point of Interest classified as 'industrial' confidence score mean,points of interest,0.00 to 1.00,451,3.297506763
+88,feat_poi_office_existence_mean,Point of Interest classified as 'office' confidence score mean,points of interest,0.00 to 1.00,462,3.377933757
+89,feat_poi_office_commercial_mixed_existence_mean,Point of Interest classified as 'office_commercial_mixed' confidence score mean,points of interest,0.00 to 1.00,134,0.979747021
+90,feat_poi_other_existence_mean,Point of Interest classified as 'other' confidence score mean,points of interest,0.00 to 1.00,2192,16.02690649
+91,feat_poi_religion_existence_mean,Point of Interest classified as 'religion' confidence score mean,points of interest,0.00 to 0.96,364,2.661402354
+92,feat_poi_residential_existence_mean,Point of Interest classified as 'residential' confidence score mean,points of interest,0.00 to 0.95,100,0.731154493
+93,feat_poi_commercial_classconf_mean,Point of Interest classified as 'commercial' classification confidence score mean,points of interest,0.00 to 0.80,2137,15.62477151
+94,feat_poi_education_classconf_mean,Point of Interest classified as 'education' classification confidence score mean,points of interest,0.00 to 0.95,696,5.088835271
+95,feat_poi_health_classconf_mean,Point of Interest classified as 'health' classification confidence score mean,points of interest,0.00 to 0.90,221,1.615851429
+96,feat_poi_industrial_classconf_mean,Point of Interest classified as 'industrial' classification confidence score mean,points of interest,0.00 to 0.80,451,3.297506763
+97,feat_poi_office_classconf_mean,Point of Interest classified as 'office' classification confidence score mean,points of interest,0.00 to 0.85,462,3.377933757
+98,feat_poi_office_commercial_mixed_classconf_mean,Point of Interest classified as 'office_commercial_mixed' classification confidence score mean,points of interest,0.00 to 0.60,134,0.979747021
+99,feat_poi_other_classconf_mean,Point of Interest classified as 'other' classification confidence score mean,points of interest,0.00 to 0.63,2192,16.02690649
+100,feat_poi_religion_classconf_mean,Point of Interest classified as 'religion' classification confidence score mean,points of interest,0.00 to 0.95,364,2.661402354
+101,feat_poi_residential_classconf_mean,Point of Interest classified as 'residential' classification confidence score mean,points of interest,0.00 to 0.76,100,0.731154493
+102,feat_poi_total_count,Point of Interest total count,points of interest,0.00 to 81.00,4077,29.80916868
+103,feat_poi_diversity,Point of Interest diversity value (Shannon index),points of interest,-0.00 to 1.63,4077,29.80916868
+104,feat_poi_neighbor_total_count,Point of Interest neighboring cells total count,points of interest,0.00 to 264.00,8898,65.05812678
+105,feat_poi_neighbor_mean_count,Point of Interest neighboring cells mean count,points of interest,0.00 to 44.00,8898,65.05812678
+106,feat_poi_neighbor_office_existence_sum,Point of Interest classified as 'office' in neighboring cells sum,points of interest,0.00 to 34.22,1754,12.82444981
+107,feat_poi_neighbor_commercial_existence_sum,Point of Interest classified as 'commercial' in neighboring cells sum,points of interest,0.00 to 74.89,6172,45.1268553
+108,feat_poi_neighbor_office_commercial_mixed_existence_sum,Point of Interest classified as 'office_commercial_mixed' in neighboring cells sum,points of interest,0.00 to 65.47,479,3.502230021
+109,feat_census_n_per,"Area-weighted spatial interpolation of census variable ""number of people"" to the H3 cells",census,0.00 to 390.60,13512,98.79
+110,feat_census_n_ocupado,"Area-weighted spatial interpolation of census variable ""number of persons aged 15 and over who are employed"" to the H3 cells",census,0.00 to 244.57,13512,98.79
+111,feat_census_n_transporte_auto,"Area-weighted spatial interpolation of census variable ""number of people employed outside their home whose primary means of transportation is: private car"" to the H3 cells",census,0.00 to 91.80,13344,97.57
+112,feat_census_n_transporte_publico,"Area-weighted spatial interpolation of census variable ""number of people employed outside their home whose primary means of transportation is: public transit"" to the H3 cells",census,0.00 to 94.75,13358,97.66761717
+113,feat_census_n_transporte_camina,"Area-weighted spatial interpolation of census variable ""number of people employed outside their home whose primary means of transportation is: walking"" to the H3 cells",census,0.00 to 71.07,12584,92.00848139
+114,feat_census_n_transporte_bicicleta,"Area-weighted spatial interpolation of census variable ""number of people employed outside their home whose primary means of transportation is: bicycle"" to the H3 cells",census,0.00 to 17.25,11502,84.09738978
+115,feat_census_n_hog,"Area-weighted spatial interpolation of census variable ""homes"" to the H3 cells",census,0.00 to 238.61,13506,98.74972582
+116,feat_census_n_hog_unipersonales,"Area-weighted spatial interpolation of census variable ""single-person households"" to the H3 cells",census,0.00 to 126.83,13427,98.17
+117,feat_census_n_vp,"Area-weighted spatial interpolation of census variable ""number of private homes"" to the H3 cells",census,0.00 to 381.56,13519,98.8447759
+118,feat_census_n_tipo_viv_casa,"Area-weighted spatial interpolation of census variable ""number of homes with housing type: house"" to the H3 cells",census,0.00 to 131.92,13518,98.83746436
+119,feat_census_n_tipo_viv_depto,"Area-weighted spatial interpolation of census variable Homes with housing type: apartment"" to the H3 cells",census,0.00 to 375.77,5202,38.03465672
+120,feat_census_n_dormitorios_1,"Area-weighted spatial interpolation of census variable ""number of 1-bedroom homes"" to the H3 cells",census,0.00 to 133.67,13372,97.7699788
+121,feat_census_n_dormitorios_2,"Area-weighted spatial interpolation of census variable ""number of 2-bedroom homes"" to the H3 cells",census,0.00 to 93.65,13461,98.4207063
+122,feat_census_n_dormitorios_3,"Area-weighted spatial interpolation of census variable ""number of 3-bedroom homes"" to the H3 cells",census,0.00 to 49.84,13440,98.26716385
+123,feat_census_n_dormitorios_4,"Area-weighted spatial interpolation of census variable ""number of 4-bedroom homes"" to the H3 cells",census,0.00 to 14.32,12808,93.64626746
+124,feat_census_n_dormitorios_5,"Area-weighted spatial interpolation of census variable ""number of 5-bedroom homes"" to the H3 cells",census,0.00 to 5.28,10152,74.22680412
+125,feat_census_n_dormitorios_6_o_mas,"Area-weighted spatial interpolation of census variable ""number of 6-or-more-bedroom homes"" to the H3 cells",census,0.00 to 4.14,5613,41.03970169
+126,feat_census_n_viv_hacinadas,"Area-weighted spatial interpolation of census variable ""number of overcrowded housing"" to the H3 cells",census,0.00 to 12.32,12241,89.5
+127,feat_census_prom_per_hog,"Area-weighted spatial interpolation of census variable ""average number of persons per household"" to the H3 cells",census,0.00 to 4.95,13506,98.74972582
+128,feat_x,"X value for the centroid of the cell in EPSG=32719, UTM Zone 19S",geometry,133581.07 to 208416.78,13677,100
+129,feat_y,"Y value for the centroid of the cell in EPSG=32719, UTM Zone 19S",geometry,5496390.44 to 5856303.92,13677,100
+130,target_residential_m2,built area of residential land use,target,0.00 to 26529.00,8774,64.15149521
+131,target_commercial_m2,built area of commercial land use,target,0.00 to 128939.00,2297,16.7946187
+132,target_office_m2,built area of office land use,target,0.00 to 14675.00,817,5.973532207
+133,target_education_m2,built area of education land use,target,0.00 to 44702.00,723,5.286246984
+134,target_health_m2,built area of health land use,target,0.00 to 38540.00,154,1.125977919
+135,target_hotel_m2,built area of hotel land use,target,0.00 to 11252.00,222,1.623162974
+136,target_industrial_m2,built area of industrial land use,target,0.00 to 60601.00,490,3.582657015
+137,target_other_m2,built area of other land use (includes all categories not explicitly mentioned),target,0.00 to 50000.00,2291,16.75074943
+138,target_parking_m2,built area of parking land use,target,0.00 to 10970.00,308,2.251955838
+139,target_recreation_m2,built area of recreation land use,target,0.00 to 45495.00,119,0.870073847
+140,target_religion_m2,built area of religion land use,target,0.00 to 6132.00,522,3.816626453
+141,target_agricola_m2,built area of agricultural use,target,0.00 to 6797.00,11,0.08
+142,target_sitio_eriazo_m2,built area of sitio eriazo land use,target,0.00 to 2534.00,29,0.212034803
+143,geometry,geometry of the cell,geometry,non-numeric,13677,100
+144,is_test,"label for the cell, whether is train or test",identification,0.00 to 1.00,2749,20.09943701
