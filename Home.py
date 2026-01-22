@@ -1,4 +1,6 @@
 import streamlit as st
+import plotly
+import plotly.express as px
 
 st.set_page_config(
     page_title="MIUS Results Explorer",
@@ -31,3 +33,4 @@ Rendimiento de los modelos
 #### Feature Explorer: 
 Explorar la distribución y descripción de todas las variables
 """)
+
