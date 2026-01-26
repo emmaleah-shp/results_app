@@ -11,7 +11,7 @@ city = st.selectbox("Ciudad", cities)
 
 FEATURE_COLS = [c for c in gdf.columns if c.startswith("feat_")]
 feature_col = st.selectbox("Feature", FEATURE_COLS) 
-st.subheader("Documentación de las variables (features)")
+st.subheader(f"**Nombre de feature** `{feat_row['feature_name']}`")
 
 feat_row = feat_summary.loc[
     feat_summary["feature_name"] == feature_col
@@ -25,17 +25,17 @@ else:
     col1, col2 = st.columns([1.2, 1])
 
     with col1:
-        st.markdown(f"### **Nombre de feature** `{feat_row['feature_name']}`")
-        st.markdown("##### **Descripción (en inglés):**")
-        st.write(feat_row["description"])
+        st.markdown(f"""##### **Descripción (en inglés):**    
+        {feat_row['description']}
+        """)
+        st.markdown(f"##### **Número de valores NON cero:** `{feat_row['non_zero_count']:,}`")
 
     with col2:
         #st.subheader(f"**Número de valores NON cero:** `{feat_row['non_zero_count']:,}`")  
-        st.markdown(f"##### **Número de valores NON cero:** `{feat_row['non_zero_count']:,}`")
         st.markdown(f"""
-        **Cobertura (%):** {feat_row['coverage_pct']:.1f}%    
-        **Rango de datos:** {feat_row['data_range']}  
-        **Tipo:** {feat_row['feature_type']} 
+        ##### **Cobertura (%):** {feat_row['coverage_pct']:.1f}%    
+        ##### **Rango de datos:** {feat_row['data_range']}  
+        ##### **Tipo:** {feat_row['feature_type']} 
         """)
 
 df = gdf[gdf["city"] == city].copy()
@@ -107,6 +107,7 @@ fs = feat_summary[
 ]
 
 st.dataframe(fs.sort_values("coverage_pct"), use_container_width=True)
+
 
 
 
