@@ -35,7 +35,7 @@ if feat_row.empty:
     st.warning("No se ha encontrado documentación para esta variable.")
 else:
     feat_row = feat_row.iloc[0]
-    st.subheader(f"**Nombre de feature** `{feat_row['feature_name']}`")
+    st.subheader(f"**Nombre de feature:** `{feat_row['feature_name']}`")
 
     col1, col2 = st.columns([1.2, 1])
 
@@ -102,7 +102,7 @@ else:
 
     fig_map.update_layout(
         height=900,  # try 650–850 depending on screen
-        title=f"Distribución {feature_col} {scale}"
+        title=f"Distribución espacial de {feature_col} ({scale})"
         )
 
     st.plotly_chart(fig_map, use_container_width=True) 
@@ -113,7 +113,7 @@ st.subheader("Distribución de features")
 col1, col2 = st.columns(2)
 
 with col1:
-    bins = st.slider("Bins", min_value=5, max_value=50, value=15)
+    bins = st.slider("Bins", min_value=5, max_value=50, value=10)
 
 with col2:
     normalize = st.checkbox("Normalizar (densidad)", value=False)
@@ -154,6 +154,7 @@ fs = feat_summary[
 ]
 
 st.dataframe(fs.sort_values("coverage_pct"), use_container_width=True)
+
 
 
 
