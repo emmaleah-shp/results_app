@@ -1,19 +1,35 @@
 import streamlit as st
 import plotly.express as px
 from utils.data_loader import load_gdf_features, load_feature_summary
+LISA_COLORS = {
+    "High-High": "#d7191c",
+    "Low-Low": "#2c7bb6",
+    "High-Low": "#fdae61",
+    "Low-High": "#abd9e9",
+    "Not significant": "#dddddd",
+}
 
 gdf = load_gdf_features()
 feat_summary = load_feature_summary()
 st.title("Explorador de variables")
 
 cities = sorted(gdf["city"].dropna().unique())
-city = st.selectbox("Ciudad", cities)
 
-FEATURE_COLS = [c for c in gdf.columns if c.startswith("feat_")]
+FEATURE_COLS = [c for c in gdf.columns if c.startswith("feat_") | c.startswith("target_")]
+transform_cols = [c for c in gdf.columns if c.startswith("log_") | c.startswith("lisa_")]
 feature_col = st.selectbox("Feature", FEATURE_COLS) 
 feat_row = feat_summary.loc[
     feat_summary["feature_name"] == feature_col
 ]
+
+city = st.sidebar.selectbox("Ciudad", cities)
+
+scale = st.sidebar.radio(
+    "Map Scale",
+    ["Raw", "Log", "LISA Clusters"],
+    horizontal=True
+)
+
 
 if feat_row.empty:
     st.warning("No se ha encontrado documentación para esta variable.")
@@ -38,26 +54,57 @@ else:
         """)
 
 df = gdf[gdf["city"] == city].copy()
+value_col = feature_col
+    if scale == "Log":
+        value_col = f"log_{feature_col}"
 
-fig_map = px.choropleth_mapbox(
-    df,
-    geojson=df.geometry,
-    locations=df.index,
-    color=feature_col,
-    color_continuous_scale="sunset",
-    mapbox_style="carto-positron",
-    zoom=11.5,
-    center={
-        "lat": df.geometry.centroid.y.mean(),
-        "lon": df.geometry.centroid.x.mean(),
-    },
-)
+    lisa_cluster_col = f"lisa_cluster_{feature_col}"
+    # lisa_i_col = f"lisa_i_{feature_col}"
+    # lisa_p_col = f"lisa_p_{feature_col}"
 
-fig_map.update_layout(
-    height=900  # try 650–850 depending on screen
+if scale =="LISA Clusters":
+    fig_map = px.choropleth_mapbox(
+        df,
+        geojson=df.geometry,
+        locations=df.index,
+        color=lisa_cluster_col,
+        color_discrete_map=LISA_COLORS,
+        mapbox_style="carto-positron",
+        zoom=11.5,
+        center={
+            "lat": df.geometry.centroid.y.mean(),
+            "lon": df.geometry.centroid.x.mean(),
+        },
     )
 
-st.plotly_chart(fig_map, use_container_width=True) 
+    fig_map.update_layout(
+        height=900,  # try 650–850 depending on screen
+        title=f"LISA Clusters: {base_var}"
+        )
+
+    st.plotly_chart(fig_map, use_container_width=True)
+
+else: 
+    fig_map = px.choropleth_mapbox(
+        df,
+        geojson=df.geometry,
+        locations=df.index,
+        color=value_col,
+        color_continuous_scale="sunset",
+        mapbox_style="carto-positron",
+        zoom=11.5,
+        center={
+            "lat": df.geometry.centroid.y.mean(),
+            "lon": df.geometry.centroid.x.mean(),
+        },
+    )
+
+    fig_map.update_layout(
+        height=900,  # try 650–850 depending on screen
+        title=f"Distribución {base_var} {scale}"
+        )
+
+    st.plotly_chart(fig_map, use_container_width=True) 
 
 st.subheader("Distribución de features")
 
@@ -73,17 +120,17 @@ with col2:
 # Histogram
 fig = px.histogram(
     gdf, # to use data filtered by city, use df
-    x=feature_col,
+    x=value_col,
     nbins=bins,
     histnorm="probability density" if normalize else None,
     marginal="box",               # shows boxplot above histogram
     template="plotly_white",
-    title=f"Distribución de {feature_col}",
+    title=f"Distribución de {value_col}",
 )
 
 fig.update_layout(
     bargap=0.05,
-    xaxis_title=feature_col,
+    xaxis_title=value_col,
     yaxis_title="Densidad" if normalize else "Conteo",
 )
 
@@ -91,21 +138,22 @@ st.plotly_chart(fig, use_container_width=True)
 
 st.divider()
 
+feat_summary = feat_summary[
+    (feat_summary["feature_name"].isin(FEATURE_COLS))
+]
+
 type = st.multiselect(
     "Tipo de variable",
     sorted(feat_summary["feature_type"].unique()),
     default=sorted(feat_summary["feature_type"].unique())
 ) 
 
-target_cols = ['target_residential_m2', 'target_commercial_m2', 'target_office_m2']
-select_cols = list(set(FEATURE_COLS + target_cols))
-
 fs = feat_summary[
-    (feat_summary["feature_type"].isin(type)) &
-    (feat_summary["feature_name"].isin(select_cols))
+    (feat_summary["feature_type"].isin(type))
 ]
 
 st.dataframe(fs.sort_values("coverage_pct"), use_container_width=True)
+
 
 
 
