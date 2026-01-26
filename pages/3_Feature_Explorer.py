@@ -11,8 +11,6 @@ city = st.selectbox("Ciudad", cities)
 
 FEATURE_COLS = [c for c in gdf.columns if c.startswith("feat_")]
 feature_col = st.selectbox("Feature", FEATURE_COLS) 
-st.subheader(f"**Nombre de feature** `{feat_row['feature_name']}`")
-
 feat_row = feat_summary.loc[
     feat_summary["feature_name"] == feature_col
 ]
@@ -21,6 +19,7 @@ if feat_row.empty:
     st.warning("No se ha encontrado documentación para esta variable.")
 else:
     feat_row = feat_row.iloc[0]
+    st.subheader(f"**Nombre de feature** `{feat_row['feature_name']}`")
 
     col1, col2 = st.columns([1.2, 1])
 
@@ -107,6 +106,7 @@ fs = feat_summary[
 ]
 
 st.dataframe(fs.sort_values("coverage_pct"), use_container_width=True)
+
 
 
 
