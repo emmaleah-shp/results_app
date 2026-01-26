@@ -25,14 +25,15 @@ else:
     col1, col2 = st.columns([1.2, 1])
 
     with col1:
-        st.subheader(f"**Nombre de feature** `{feat_row['feature_name']}`")
-        st.markdown("**Descripción (en inglés)**")
+        st.markdown(f"### **Nombre de feature** `{feat_row['feature_name']}`")
+        st.markdown("##### **Descripción (en inglés):**")
         st.write(feat_row["description"])
 
     with col2:
-        st.subheader(f"**Número de valores NON cero:** `{feat_row['non_zero_count']:,}`")  
+        #st.subheader(f"**Número de valores NON cero:** `{feat_row['non_zero_count']:,}`")  
+        st.markdown(f"##### **Número de valores NON cero:** `{feat_row['non_zero_count']:,}`")
         st.markdown(f"""
-        **Cobertura (%):** {feat_row['coverage_pct']:.1f}% 
+        **Cobertura (%):** {feat_row['coverage_pct']:.1f}%    
         **Rango de datos:** {feat_row['data_range']}  
         **Tipo:** {feat_row['feature_type']} 
         """)
@@ -106,6 +107,7 @@ fs = feat_summary[
 ]
 
 st.dataframe(fs.sort_values("coverage_pct"), use_container_width=True)
+
 
 
 
