@@ -65,14 +65,14 @@ st.subheader("Distribución de features")
 col1, col2 = st.columns(2)
 
 with col1:
-    bins = st.slider("Bins", min_value=10, max_value=100, value=30)
+    bins = st.slider("Bins", min_value=5, max_value=50, value=15)
 
 with col2:
     normalize = st.checkbox("Normalizar (densidad)", value=False)
 
 # Histogram
 fig = px.histogram(
-    df, # to use total data not filtered by city, use gdf
+    gdf, # to use data filtered by city, use df
     x=feature_col,
     nbins=bins,
     histnorm="probability density" if normalize else None,
@@ -106,5 +106,6 @@ fs = feat_summary[
 ]
 
 st.dataframe(fs.sort_values("coverage_pct"), use_container_width=True)
+
 
 
