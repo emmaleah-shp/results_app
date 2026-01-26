@@ -4,37 +4,37 @@ from utils.data_loader import load_gdf_features, load_feature_summary
 
 gdf = load_gdf_features()
 feat_summary = load_feature_summary()
-st.title("Feature Explorer")
+st.title("Explorador de variables")
 
 cities = sorted(gdf["city"].dropna().unique())
-city = st.selectbox("City", cities)
+city = st.selectbox("Ciudad", cities)
 
 FEATURE_COLS = sorted([c for c in gdf.columns if c.startswith("feat_")]) 
 feature_col = st.selectbox("Feature", FEATURE_COLS) 
-st.subheader("Feature Documentation")
+st.subheader("Documentación de las variables (features)")
 
 feat_row = feat_summary.loc[
     feat_summary["feature_name"] == feature_col
 ]
 
 if feat_row.empty:
-    st.warning("No documentation found for this feature.")
+    st.warning("No se ha encontrado documentación para esta variable.")
 else:
     feat_row = feat_row.iloc[0]
 
     col1, col2 = st.columns([1.2, 1])
 
     with col1:
-        st.markdown(f"**Feature name** `{feat_row['feature_name']}`")
-        st.markdown("**Description**")
+        st.markdown(f"**Nombre de feature** `{feat_row['feature_name']}`")
+        st.markdown("**Descripción (en inglés)**")
         st.write(feat_row["description"])
 
     with col2:
         st.markdown(f"""
-        **Non-zero count:** {feat_row['non_zero_count']:,}  
-        **Coverage (%):** {feat_row['coverage_pct']:.1f}% 
-        **Data range:** {feat_row['data_range']}  
-        **Type:** {feat_row['feature_type']} 
+        **Número de ceros:** {feat_row['non_zero_count']:,}  
+        **Cobertura (%):** {feat_row['coverage_pct']:.1f}% 
+        **Rango de datos:** {feat_row['data_range']}  
+        **Tipo:** {feat_row['feature_type']} 
         """)
 
 df = gdf[gdf["city"] == city].copy()
@@ -53,12 +53,26 @@ fig = px.choropleth_mapbox(
     },
 )
 
-
 fig.update_layout(
     height=900  # try 650–850 depending on screen
     )
 
-
 st.plotly_chart(fig, use_container_width=True) 
 
+
+
 st.divider()
+
+type = st.multiselect(
+    "Tipo de variable",
+    sorted(feat_summary["feature_type"].unique()),
+    default=sorted(feat_summary["feature_type"].unique())
+) 
+
+fs = feat_summary[
+   # (feat_summary["feature_type"] == type) &
+    (feat_summary["feature_type"].isin(type))
+   # (feat_summary["feature_type"].isin(iteration))
+]
+
+st.dataframe(fs.sort_values("coverage_pct"), use_container_width=True)
