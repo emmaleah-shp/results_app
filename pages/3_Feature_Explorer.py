@@ -59,7 +59,7 @@ if scale == "Log":
     value_col = f"log_{feature_col}"
 elif scale == "Raw":
     value_col = feature_col
-elif scale == "LISA Clusters"
+elif scale == "LISA Clusters":
     value_col = f"lisa_cluster_{feature_col}"
     # lisa_i_col = f"lisa_i_{feature_col}"
     # lisa_p_col = f"lisa_p_{feature_col}"
@@ -154,6 +154,7 @@ fs = feat_summary[
 ]
 
 st.dataframe(fs.sort_values("coverage_pct"), use_container_width=True)
+
 
 
 
