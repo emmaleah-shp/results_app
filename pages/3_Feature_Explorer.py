@@ -81,7 +81,7 @@ if scale =="LISA Clusters":
 
     fig_map.update_layout(
         height=900,  # try 650–850 depending on screen
-        title=f"LISA Clusters: {base_var}"
+        title=f"LISA Clusters: {feature_col}"
         )
 
     st.plotly_chart(fig_map, use_container_width=True)
@@ -102,7 +102,7 @@ else:
 
     fig_map.update_layout(
         height=900,  # try 650–850 depending on screen
-        title=f"Distribución {base_var} {scale}"
+        title=f"Distribución {feature_col} {scale}"
         )
 
     st.plotly_chart(fig_map, use_container_width=True) 
@@ -154,6 +154,7 @@ fs = feat_summary[
 ]
 
 st.dataframe(fs.sort_values("coverage_pct"), use_container_width=True)
+
 
 
 
