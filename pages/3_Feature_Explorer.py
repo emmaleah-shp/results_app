@@ -9,7 +9,7 @@ st.title("Explorador de variables")
 cities = sorted(gdf["city"].dropna().unique())
 city = st.selectbox("Ciudad", cities)
 
-FEATURE_COLS = sorted([c for c in gdf.columns if c.startswith("feat_")]) 
+FEATURE_COLS = [c for c in gdf.columns if c.startswith("feat_")]
 feature_col = st.selectbox("Feature", FEATURE_COLS) 
 st.subheader("Documentación de las variables (features)")
 
@@ -69,10 +69,21 @@ type = st.multiselect(
     default=sorted(feat_summary["feature_type"].unique())
 ) 
 
-fs = feat_summary[
-   # (feat_summary["feature_type"] == type) &
-    (feat_summary["feature_type"].isin(type))
-   # (feat_summary["feature_type"].isin(iteration))
+feat_summary_select = (
+    feat_summary
+    .loc[:, lambda df:
+         df.columns.str.startswith("feat_") |
+         df.columns.isin([
+             "target_residential_m2",
+             "target_commercial_m2",
+             "target_office_m2"
+         ])
+    ]
+)
+
+fs = feat_summary_select[
+    (feat_summary_select["feature_type"].isin(type))
 ]
 
 st.dataframe(fs.sort_values("coverage_pct"), use_container_width=True)
+
