@@ -31,10 +31,10 @@ else:
 
     with col2:
         st.markdown(f"""
-        **Type:** {feat_row['feature_type']}  
-        **Data range:** {feat_row['data_range']}  
         **Non-zero count:** {feat_row['non_zero_count']:,}  
-        **Coverage (%):** {feat_row['coverage_pct']:.1f}%
+        **Coverage (%):** {feat_row['coverage_pct']:.1f}% 
+        **Data range:** {feat_row['data_range']}  
+        **Type:** {feat_row['feature_type']} 
         """)
 
 df = gdf[gdf["city"] == city].copy()
@@ -58,4 +58,7 @@ fig.update_layout(
     height=900  # try 650–850 depending on screen
     )
 
+
 st.plotly_chart(fig, use_container_width=True) 
+
+st.divider()
