@@ -6,14 +6,14 @@ metrics = load_metrics()
 
 st.title("Model Performance Metrics")
 
-use = st.selectbox("Land use", sorted(metrics["use"].unique()))
+use = st.selectbox("Uso del suelo", sorted(metrics["use"].unique()))
 model = st.multiselect(
-    "Model",
+    "Modelo",
     sorted(metrics["model"].unique()),
     default=sorted(metrics["model"].unique())
 )
 iteration = st.multiselect(
-    "Iteration",
+    "Iteración",
     sorted(metrics["model_iteration"].unique()),
     default=sorted(metrics["model_iteration"].unique())
 )
@@ -36,3 +36,4 @@ fig = px.bar(
 )
 
 st.plotly_chart(fig, use_container_width=True)
+
