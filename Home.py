@@ -7,7 +7,7 @@ st.set_page_config(
     layout="wide"
 )
 
-st.title("MIUS Results Explorer")
+st.title("Explorador de resultados MIUS")
 
 st.markdown("""
 Esta aplicación permite explorar:
@@ -21,7 +21,7 @@ Utilice el panel de navegación de la izquierda para comenzar.
 """)
 
 st.divider()
-st.subheader("Pages and Descriptions")
+st.subheader("Páginas y descripciones")
 
 st.markdown("""
 #### Map Explorer:
@@ -31,6 +31,7 @@ Mapa de los errores de predicción espacial y un scatterplot de "True vs Predict
 Rendimiento de los modelos
 
 #### Feature Explorer: 
-Explorar la distribución y descripción de todas las variables
+Explorar la distribución y descripción de todas las variables, con un mapa y un histograma
 """)
+
 
