@@ -108,6 +108,7 @@ else:
     st.plotly_chart(fig_map, use_container_width=True) 
 
 st.subheader("Distribución de features")
+st.markdown("_*En todos los hexágonos_")
 
 # Controls
 col1, col2 = st.columns(2)
@@ -154,6 +155,7 @@ fs = feat_summary[
 ]
 
 st.dataframe(fs.sort_values("coverage_pct"), use_container_width=True)
+
 
 
 
