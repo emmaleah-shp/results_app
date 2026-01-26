@@ -12,7 +12,7 @@ def load_metrics():
 
 @st.cache_data
 def load_gdf_features():
-    return gpd.read_parquet("data/hex_features_explore.geoparquet")
+    return gpd.read_parquet("data/hex_features_explore_1.geoparquet")
 
 @st.cache_data
 def load_feature_summary():
@@ -21,4 +21,5 @@ def load_feature_summary():
     )
     # keep only relevant columns (as you already do)
     df = df.iloc[:, 1:7]
+
     return df
