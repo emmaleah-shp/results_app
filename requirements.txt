@@ -1,9 +1,7 @@
-python>=3.14.2
-streamlit
-plotly
-geopandas
-geos
+streamlit==1.53.1
+plotly>=5.18.0
+
 numpy
 pandas
-proj
 pyarrow
+geopandas
