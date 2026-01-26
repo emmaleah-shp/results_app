@@ -39,7 +39,7 @@ else:
 
 df = gdf[gdf["city"] == city].copy()
 
-fig = px.choropleth_mapbox(
+fig_map = px.choropleth_mapbox(
     df,
     geojson=df.geometry,
     locations=df.index,
@@ -53,13 +53,41 @@ fig = px.choropleth_mapbox(
     },
 )
 
-fig.update_layout(
+fig_map.update_layout(
     height=900  # try 650–850 depending on screen
     )
 
-st.plotly_chart(fig, use_container_width=True) 
+st.plotly_chart(fig_map, use_container_width=True) 
 
+st.subheader("Distribución de features")
 
+# Controls
+col1, col2 = st.columns(2)
+
+with col1:
+    bins = st.slider("Bins", min_value=10, max_value=100, value=30)
+
+with col2:
+    normalize = st.checkbox("Normalizar (densidad)", value=False)
+
+# Histogram
+fig = px.histogram(
+    df, # to use total data not filtered by city, use gdf
+    x=feature_col,
+    nbins=bins,
+    histnorm="probability density" if normalize else None,
+    marginal="box",               # shows boxplot above histogram
+    template="plotly_white",
+    title=f"Distribución de {feature_col}",
+)
+
+fig.update_layout(
+    bargap=0.05,
+    xaxis_title=feature_col,
+    yaxis_title="Densidad" if normalize else "Conteo",
+)
+
+st.plotly_chart(fig, use_container_width=True)
 
 st.divider()
 
@@ -69,21 +97,14 @@ type = st.multiselect(
     default=sorted(feat_summary["feature_type"].unique())
 ) 
 
-feat_summary_select = (
-    feat_summary
-    .loc[:, lambda df:
-         df.columns.str.startswith("feat_") |
-         df.columns.isin([
-             "target_residential_m2",
-             "target_commercial_m2",
-             "target_office_m2"
-         ])
-    ]
-)
+target_cols = ['target_residential_m2', 'target_commercial_m2', 'target_office_m2']
+select_cols = list(set(FEATURE_COLS + target_cols))
 
-fs = feat_summary_select[
-    (feat_summary_select["feature_type"].isin(type))
+fs = feat_summary[
+    (feat_summary["feature_type"].isin(type)) &
+    (feat_summary["feature_name"].isin(select_cols))
 ]
 
 st.dataframe(fs.sort_values("coverage_pct"), use_container_width=True)
+
 
