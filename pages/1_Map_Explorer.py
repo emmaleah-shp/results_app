@@ -153,6 +153,7 @@ st.markdown("""
 ##### Iteración:
   - A1 = rendimiento original (hierarchical decision tree) sin selección de variables
   - A2 = rendimiento original CON seleccion de variables con alta correlación con los 3 usos 'target'
+  - A3 = Eliminar todos los hexágonos (pre-split) que se encuentren fuera del percentil 99.
   - B1 = Hierarchical decision tree estructura con búsqueda aleatoria en cuadrícula para el ajuste de parámetros.
   - B1_pruned = B1 con análisis de importancia de permutación  y posterior ajuste de características
 
@@ -227,6 +228,7 @@ st.markdown("""
 | **Best Use Case in Your Workflow**            | Stage 1 (binary “has_use”) or full pipeline when max stability matters           | Stage 2 (m² regression) when maximizing accuracy                       |
 | **Overall Strengths**                         | Stability, robust defaults, good for noisy + small data                          | Speed, high accuracy when tuned, ideal with reduced features           |
 | **Overall Weaknesses**                        | Slower, may underfit slightly                                                    | Sensitive to hyperparameters & correlation                             |
+
 
 
 """)
