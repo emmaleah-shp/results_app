@@ -101,7 +101,7 @@ if scale =="LISA Clusters":
     
         fig_test.update_traces(
             marker_line_color="black",
-            marker_line_width=2.0,
+            marker_line_width=3.0,
             # showlegend=False,
         )
     
@@ -140,7 +140,7 @@ else:
     
         fig_test.update_traces(
             marker_line_color="black",
-            marker_line_width=2.0,
+            marker_line_width=3.0,
             # showlegend=False,
         )
     
@@ -197,6 +197,7 @@ fs = feat_summary[
 ]
 
 st.dataframe(fs.sort_values("coverage_pct"), use_container_width=True)
+
 
 
 
