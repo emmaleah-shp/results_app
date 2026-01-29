@@ -136,12 +136,12 @@ with col_map:
 # ---------------- Scatter ----------------
 with col_scatter:
     st.subheader("True vs Predicted")
-
-    pred_col = f"{model_iter}_{model}_{use}_m2"
     
-    if pred_col not in df_valid.columns:
-        st.warning(f"Column not available for visualization: {pred_col}")
-        st.stop()
+    if model == "nn" or model == "nn_log":
+        df_valid = df_valid.assign(c1_nn_m2 = df_valid[target_col] - df_valid[f"c1_nn_{use}_error"])
+        pred_col = "c1_nn_m2"
+    else:
+        pred_col = f"{model_iter}_{model}_{use}_m2"
 
     fig_scatter = px.scatter(
         df_valid,
@@ -270,6 +270,7 @@ st.markdown("""
 
 
 """)
+
 
 
 
