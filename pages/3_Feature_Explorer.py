@@ -30,6 +30,11 @@ scale = st.sidebar.radio(
     horizontal=True
 )
 
+show_test = st.sidebar.radio(
+    "Show test hexagons",
+    ["Yes", "No"],
+    horizontal=True
+)
 
 if feat_row.empty:
     st.warning("No se ha encontrado documentación para esta variable.")
@@ -85,22 +90,23 @@ if scale =="LISA Clusters":
         title=f"LISA Clusters: {feature_col}"
         )
     
-    fig_test = px.choropleth_mapbox(
-        df_test,
-        geojson=df_test.geometry,
-        locations=df_test.index,
-        color_discrete_sequence=["rgba(0,0,0,0)"],  # fully transparent fill
-        hover_data={value_col: value_col},
-    )
-
-    fig_test.update_traces(
-        marker_line_color="black",
-        marker_line_width=2.0,
-        # showlegend=False,
-    )
-
-    for trace in fig_test.data:
-        fig_map.add_trace(trace)
+    if show_test =="Yes":
+        fig_test = px.choropleth_mapbox(
+            df_test,
+            geojson=df_test.geometry,
+            locations=df_test.index,
+            color_discrete_sequence=["rgba(0,0,0,0)"],  # fully transparent fill
+            hover_data={value_col: True},
+        )
+    
+        fig_test.update_traces(
+            marker_line_color="black",
+            marker_line_width=2.0,
+            # showlegend=False,
+        )
+    
+        for trace in fig_test.data:
+            fig_map.add_trace(trace)
 
     st.plotly_chart(fig_map, use_container_width=True)
 else: 
@@ -123,22 +129,23 @@ else:
         title=f"Distribución espacial de {feature_col} ({scale})"
         )
     
-    fig_test = px.choropleth_mapbox(
-        df_test,
-        geojson=df_test.geometry,
-        locations=df_test.index,
-        color_discrete_sequence=["rgba(0,0,0,0)"],  # fully transparent fill
-        hover_data={value_col: value_col},
-    )
-
-    fig_test.update_traces(
-        marker_line_color="black",
-        marker_line_width=2.0,
-        # showlegend=False,
-    )
-
-    for trace in fig_test.data:
-        fig_map.add_trace(trace)
+    if show_test =="Yes":
+        fig_test = px.choropleth_mapbox(
+            df_test,
+            geojson=df_test.geometry,
+            locations=df_test.index,
+            color_discrete_sequence=["rgba(0,0,0,0)"],  # fully transparent fill
+            hover_data={value_col: True},
+        )
+    
+        fig_test.update_traces(
+            marker_line_color="black",
+            marker_line_width=2.0,
+            # showlegend=False,
+        )
+    
+        for trace in fig_test.data:
+            fig_map.add_trace(trace)
 
     st.plotly_chart(fig_map, use_container_width=True) 
 
@@ -190,6 +197,7 @@ fs = feat_summary[
 ]
 
 st.dataframe(fs.sort_values("coverage_pct"), use_container_width=True)
+
 
 
 
