@@ -54,6 +54,10 @@ elif model == "nn" or model == "nn_log":
 # ---------------- Filter data ----------------
 df = gdf[gdf["city"] == city].copy()
 
+if model == "nn" or model == "nn_log" and var_type == "predicción":
+    df = df.assign(c1_nn_m2 = df[target_col] - df[f"c1_nn_{use}_error"])
+    value_col = "c1_nn_m2"
+    
 if value_col not in df.columns:
     st.warning(f"Column not found: {value_col}")
     st.stop()
@@ -270,6 +274,7 @@ st.markdown("""
 
 
 """)
+
 
 
 
