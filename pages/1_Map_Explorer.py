@@ -28,7 +28,7 @@ target_col = f"target_{use}_m2"
 
 if var_type == "predicción":
     if model == "nn" or model == "nn_log":
-        df = df.assign(c1_nn_m2 = df[target_col] - df[f"c1_nn_{use}_error"])
+        gdf = gdf.assign(c1_nn_m2 = gdf[target_col] - gdf[f"c1_nn_{use}_error"])
         value_col = "c1_nn_m2"
         hover_col = f"{model_iter}_nn_pct_{use}_error"
     else:
@@ -275,6 +275,7 @@ st.markdown("""
 
 
 """)
+
 
 
 
