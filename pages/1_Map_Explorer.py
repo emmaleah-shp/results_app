@@ -52,9 +52,12 @@ df = gdf[gdf["city"] == city].copy()
 if value_col not in df.columns:
     st.warning(f"Column not found: {value_col}")
     st.stop()
-# elif value_col==target_col: 
-#     st.warning(f"Cambiar tipo variable primero para comparar con valores reales")
-#     st.stop()
+
+df_city = df.copy()
+
+df_valid = df_city[df_city[value_col].notna()]
+df_nan = df_city[df_city[value_col].isna()]
+
 
 # ---------------- Layout ----------------
 col_map, col_scatter = st.columns([1.2, 1])
@@ -65,30 +68,54 @@ with col_map:
     st.subheader("Distribución espacial")
     st.markdown(f"###### Modeling _{value_col}_")
     max_abs = max(
-        abs(df[value_col].min()),
-        abs(df[value_col].max())
+        abs(df_valid[value_col].min()),
+        abs(df_valid[value_col].max()),
     )
 
+
     fig_map = px.choropleth_mapbox(
-        df,
-        geojson=df.geometry,
-        locations=df.index,
-        color=value_col, #map_values
-        hover_data={target_col: True, value_col: ':.2f', hover_col: ':.2f'},
+        df_valid,
+        geojson=df_valid.geometry,
+        locations=df_valid.index,
+        color=value_col,
+        hover_data={
+            target_col: True,
+            value_col: ':.2f',
+            hover_col: ':.2f'
+        },
         mapbox_style="carto-positron",
         zoom=11.5,
         center={
-            "lat": df.geometry.centroid.y.mean(),
-            "lon": df.geometry.centroid.x.mean(),
+            "lat": df_city.geometry.centroid.y.mean(),
+            "lon": df_city.geometry.centroid.x.mean(),
         },
         color_continuous_scale="RdBu",
-        color_continuous_midpoint=0, 
+        color_continuous_midpoint=0,
     )
     
     fig_map.update_traces(
         zmin=-max_abs,
-        zmax=max_abs
+        zmax=max_abs,
+        marker_line_width=0.2,
+        marker_line_color="rgba(0,0,0,0.2)",
     )
+    if len(df_nan) > 0:
+        fig_nan = px.choropleth_mapbox(
+            df_nan,
+            geojson=df_nan.geometry,
+            locations=df_nan.index,
+            color_discrete_sequence=["rgba(0,0,0,0)"],  # fully transparent fill
+            hover_data={value_col: False},
+        )
+    
+        fig_nan.update_traces(
+            marker_line_color="black",
+            marker_line_width=1.0,
+            showlegend=False,
+        )
+    
+        for trace in fig_nan.data:
+            fig_map.add_trace(trace)
 
     st.caption(
         "_*Error = True − Prediction, i.e. Positivo=Subestimación | Negativo=Sobreestimación_"
@@ -108,14 +135,14 @@ with col_scatter:
     pred_col = f"{model_iter}_{model}_{use}_m2"
 
     fig_scatter = px.scatter(
-        df,
+        df_valid,
         x=target_col,
         y=pred_col,
         opacity=0.3,
         labels={"x": "True m²", "y": "Predicted m²"},
     )
 
-    max_val = max(df[target_col].max(), df[pred_col].max())
+    max_val = max(df_valid[target_col].max(), df_valid[pred_col].max())
 
     fig_scatter.add_shape(
         type="line",
@@ -134,16 +161,16 @@ st.markdown(f"""
             Error percentile for {model_name} model: {use.title()}
             """)
 st.markdown(f"""
-            50th percentile: {np.nanpercentile(np.abs(df[value_col]), 50):.2f} 
+            50th percentile: {np.nanpercentile(np.abs(df_valid[value_col]), 50):.2f} 
             """)
 st.markdown(f"""
-            75th percentile: {np.nanpercentile(np.abs(df[value_col]), 75):.2f} 
+            75th percentile: {np.nanpercentile(np.abs(df_valid[value_col]), 75):.2f} 
             """)
 st.markdown(f"""
-            90th percentile: {np.nanpercentile(np.abs(df[value_col]), 90):.2f}
+            90th percentile: {np.nanpercentile(np.abs(df_valid[value_col]), 90):.2f}
             """)
 st.markdown(f"""
-            Max: {max(np.abs(df[value_col])):.2f}
+            Max: {max(np.abs(df_valid[value_col])):.2f}
             """)
 
 st.divider()
@@ -153,21 +180,23 @@ st.markdown("""
 ##### Iteración:
   - A1 = rendimiento original (hierarchical decision tree) sin selección de variables
   - A2 = rendimiento original CON seleccion de variables con alta correlación con los 3 usos 'target'
-  - A3 = Eliminar todos los hexágonos (pre-split) que se encuentren fuera del percentil 99.
+  - A3 = Eliminar todos los hexágonos outliers (pre-split) que se encuentren fuera del percentil ~99.
   - B1 = Hierarchical decision tree estructura con búsqueda aleatoria en cuadrícula para el ajuste de parámetros.
   - B1_pruned = B1 con análisis de importancia de permutación  y posterior ajuste de características
+  - C1 = neural network resultados utilizando variables transformadas (LISA Moran, log1p)
+  - C2 = neural network resultados utilizando variables base (sin transformar)
 
 ##### Modelos:
   - XGBoost
   - RandomForest
   - Light GBM
   - CatBoost
+  - MLP (neural network)
 
 ##### Next Steps:
   - Implement soft hierarchical routing 
-  - Quantify where errors come from (which hexes) and why
-  - Add spatial cross-validation 
-  - Feature normalization
+  - Spatial cross-validation 
+  - "distance from center" variable
 """)
 
 
@@ -232,4 +261,5 @@ st.markdown("""
 
 
 """)
+
 
