@@ -12,6 +12,19 @@ model = st.multiselect(
     sorted(metrics["model"].unique()),
     default=sorted(metrics["model"].unique())
 )
+
+if model == "rf":
+    model_name = "Random Forest"
+elif model == "xgb":
+    model_name = "XGBoost"
+elif model == "lgbm":
+    model_name = "LightGBM"
+elif model == "cat":
+    model_name = "CatBoost"
+elif model == "nn" or model == "nn_log":
+    model_name = "Multilayer Perceptron (red neuronal)"
+
+
 iteration = st.multiselect(
     "Iteración",
     sorted(metrics["model_iteration"].unique()),
@@ -26,14 +39,27 @@ df = metrics[
 
 st.dataframe(df.sort_values("MAE"), use_container_width=True)
 
-fig = px.bar(
-    df,
-    x="model",
-    y="MAE",
-    color="model_iteration",
-    barmode="group",
-    title="MAE by Model and Iteration",
-)
+barshow = st.selectbox("Ver estadística", ["MAE","r2"])
+if barshow =="MAE": 
+    fig = px.bar(
+        df,
+        x="model",
+        y="MAE",
+        color="model_iteration",
+        barmode="group",
+        title="MAE by Model and Iteration",
+    )
+    
+else: 
+    fig = px.bar(
+        df,
+        x="model",
+        y="R2",
+        color="model_iteration",
+        barmode="group",
+        title="R2 by Model and Iteration",
+    )
 
 st.plotly_chart(fig, use_container_width=True)
+
 
