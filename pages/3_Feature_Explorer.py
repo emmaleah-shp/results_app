@@ -54,6 +54,7 @@ else:
         """)
 
 df = gdf[gdf["city"] == city].copy()
+df_test = df[df["is_test"]].copy()
 
 if scale == "Log":
     value_col = f"log_{feature_col}"
@@ -83,6 +84,22 @@ if scale =="LISA Clusters":
         height=900,  # try 650–850 depending on screen
         title=f"LISA Clusters: {feature_col}"
         )
+    
+    fig_test = px.choropleth_mapbox(
+        df_test,
+        geojson=df_test.geometry,
+        locations=df_test.index,
+        color_discrete_sequence=["rgba(0,0,0,0)"],  # fully transparent fill
+    )
+
+    fig_test.update_traces(
+        marker_line_color="black",
+        marker_line_width=1.0,
+        # showlegend=False,
+    )
+
+    for trace in fig_test.data:
+        fig_map.add_trace(trace)
 
     st.plotly_chart(fig_map, use_container_width=True)
 else: 
@@ -104,6 +121,22 @@ else:
         height=900,  # try 650–850 depending on screen
         title=f"Distribución espacial de {feature_col} ({scale})"
         )
+    
+    fig_test = px.choropleth_mapbox(
+        df_test,
+        geojson=df_test.geometry,
+        locations=df_test.index,
+        color_discrete_sequence=["rgba(0,0,0,0)"],  # fully transparent fill
+    )
+
+    fig_test.update_traces(
+        marker_line_color="black",
+        marker_line_width=1.0,
+        # showlegend=False,
+    )
+
+    for trace in fig_test.data:
+        fig_map.add_trace(trace)
 
     st.plotly_chart(fig_map, use_container_width=True) 
 
@@ -155,6 +188,7 @@ fs = feat_summary[
 ]
 
 st.dataframe(fs.sort_values("coverage_pct"), use_container_width=True)
+
 
 
 
