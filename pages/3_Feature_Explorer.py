@@ -90,11 +90,12 @@ if scale =="LISA Clusters":
         geojson=df_test.geometry,
         locations=df_test.index,
         color_discrete_sequence=["rgba(0,0,0,0)"],  # fully transparent fill
+        hover_data={value_col: value_col},
     )
 
     fig_test.update_traces(
         marker_line_color="black",
-        marker_line_width=1.0,
+        marker_line_width=2.0,
         # showlegend=False,
     )
 
@@ -127,11 +128,12 @@ else:
         geojson=df_test.geometry,
         locations=df_test.index,
         color_discrete_sequence=["rgba(0,0,0,0)"],  # fully transparent fill
+        hover_data={value_col: value_col},
     )
 
     fig_test.update_traces(
         marker_line_color="black",
-        marker_line_width=1.0,
+        marker_line_width=2.0,
         # showlegend=False,
     )
 
@@ -188,6 +190,7 @@ fs = feat_summary[
 ]
 
 st.dataframe(fs.sort_values("coverage_pct"), use_container_width=True)
+
 
 
 
