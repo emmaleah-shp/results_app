@@ -31,7 +31,10 @@ if var_type == "predicción":
     hover_col = f"{model_iter}_{model}_{use}_error"
 elif var_type == "error":
     value_col = f"{model_iter}_{model}_{use}_error"
-    hover_col = f"{model_iter}_{model}_{use}_m2"
+    if model == "nn" or model == "nn_log":
+        hover_col = f"{model_iter}_nn_pct_{use}_error"
+    else: 
+        hover_col = f"{model_iter}_{model}_{use}_m2"
 elif var_type == "true":
     value_col = target_col
     hover_col = f"{model_iter}_{model}_{use}_error"
@@ -44,6 +47,8 @@ elif model == "lgbm":
     model_name = "LightGBM"
 elif model == "cat":
     model_name = "CatBoost"
+elif model == "nn" or model == "nn_log":
+    model_name = "Multilayer Perceptron (red neuronal)"
 
 
 # ---------------- Filter data ----------------
@@ -86,8 +91,8 @@ with col_map:
         mapbox_style="carto-positron",
         zoom=11.5,
         center={
-            "lat": df_city.geometry.centroid.y.mean(),
-            "lon": df_city.geometry.centroid.x.mean(),
+            "lat": df_valid.geometry.centroid.y.mean(),
+            "lon": df_valid.geometry.centroid.x.mean(),
         },
         color_continuous_scale="RdBu",
         color_continuous_midpoint=0,
@@ -133,6 +138,10 @@ with col_scatter:
     st.subheader("True vs Predicted")
 
     pred_col = f"{model_iter}_{model}_{use}_m2"
+    
+    if pred_col not in df_valid.columns:
+        st.warning(f"Column not available for visualization: {pred_col}")
+        st.stop()
 
     fig_scatter = px.scatter(
         df_valid,
@@ -261,5 +270,6 @@ st.markdown("""
 
 
 """)
+
 
 
