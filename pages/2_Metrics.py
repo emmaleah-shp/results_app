@@ -39,7 +39,7 @@ df = metrics[
 
 st.dataframe(df.sort_values("MAE"), use_container_width=True)
 
-barshow = st.selectbox("Ver estadística", ["MAE","r2"])
+barshow = st.selectbox("Ver estadística", ["R2","MAE"])
 if barshow =="MAE": 
     fig = px.bar(
         df,
@@ -61,5 +61,6 @@ else:
     )
 
 st.plotly_chart(fig, use_container_width=True)
+
 
 
