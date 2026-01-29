@@ -27,8 +27,13 @@ var_type = st.sidebar.radio("Tipo variable", ["error", "predicción", "true"])
 target_col = f"target_{use}_m2"
 
 if var_type == "predicción":
-    value_col = f"{model_iter}_{model}_{use}_m2"
-    hover_col = f"{model_iter}_{model}_{use}_error"
+    if model == "nn" or model == "nn_log":
+        df = df.assign(c1_nn_m2 = df[target_col] - df[f"c1_nn_{use}_error"])
+        value_col = "c1_nn_m2"
+        hover_col = f"{model_iter}_nn_pct_{use}_error"
+    else:
+        value_col = f"{model_iter}_{model}_{use}_m2"
+        hover_col = f"{model_iter}_{model}_{use}_error"
 elif var_type == "error":
     value_col = f"{model_iter}_{model}_{use}_error"
     if model == "nn" or model == "nn_log":
@@ -54,10 +59,6 @@ elif model == "nn" or model == "nn_log":
 # ---------------- Filter data ----------------
 df = gdf[gdf["city"] == city].copy()
 
-if model == "nn" or model == "nn_log" and var_type == "predicción":
-    df = df.assign(c1_nn_m2 = df[target_col] - df[f"c1_nn_{use}_error"])
-    value_col = "c1_nn_m2"
-    
 if value_col not in df.columns:
     st.warning(f"Column not found: {value_col}")
     st.stop()
@@ -274,6 +275,7 @@ st.markdown("""
 
 
 """)
+
 
 
 
