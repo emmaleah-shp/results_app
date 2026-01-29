@@ -19,8 +19,9 @@ def load_feature_summary():
     df = pd.read_csv(
         "data/feature_summary_for_team.csv"
     )
-    # keep only relevant columns (as you already do)
+    
     df = df.iloc[:, 1:7]
 
     return df
+
 
