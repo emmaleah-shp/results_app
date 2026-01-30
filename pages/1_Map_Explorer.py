@@ -70,7 +70,7 @@ df_nan = df_city[df_city[value_col].isna()]
 
 
 # ---------------- Layout ----------------
-col_map, col_scatter = st.columns([0.65, 0.35])
+col_map, col_scatter = st.columns([0.6, 0.4])
 percentiles, guide = st.columns([0.35, 0.65])
 # ---------------- Map ---------------- 
 
@@ -172,19 +172,19 @@ with col_scatter:
     st.plotly_chart(fig_scatter, use_container_width=True)
 with percentiles: 
     st.markdown(f"""
-                Error percentile for {model_name} model: {use.title()}
+                ###### Error percentile for {model_name} model: {use.title()}
                 """)
     st.markdown(f"""
-                50th percentile: {np.nanpercentile(np.abs(df_valid[value_col]), 50):.2f} 
+                ###### 50th percentile: {np.nanpercentile(np.abs(df_valid[value_col]), 50):.2f} 
                 """)
     st.markdown(f"""
-                75th percentile: {np.nanpercentile(np.abs(df_valid[value_col]), 75):.2f} 
+                ###### 75th percentile: {np.nanpercentile(np.abs(df_valid[value_col]), 75):.2f} 
                 """)
     st.markdown(f"""
-                90th percentile: {np.nanpercentile(np.abs(df_valid[value_col]), 90):.2f}
+                ###### 90th percentile: {np.nanpercentile(np.abs(df_valid[value_col]), 90):.2f}
                 """)
     st.markdown(f"""
-                Max: {max(np.abs(df_valid[value_col])):.2f}
+                ###### Max: {max(np.abs(df_valid[value_col])):.2f}
                 """)
 
 with guide: 
@@ -289,6 +289,7 @@ st.markdown("""
 
 
 """)
+
 
 
 
