@@ -71,7 +71,7 @@ df_nan = df_city[df_city[value_col].isna()]
 
 # ---------------- Layout ----------------
 col_map, col_scatter = st.columns([1.2, 1])
-percentiles, guide = st.columns([1.2, 1])
+percentiles, guide = st.columns([0.3, 0.7])
 # ---------------- Map ---------------- 
 
 with col_map:
@@ -289,6 +289,7 @@ st.markdown("""
 
 
 """)
+
 
 
 
