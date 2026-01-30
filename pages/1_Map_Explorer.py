@@ -172,8 +172,8 @@ with col_scatter:
     st.plotly_chart(fig_scatter, use_container_width=True)
 with percentiles: 
     st.markdown(f"""
-                ##### Error percentile for {model_name} model:         
-                {use.title()}
+                ##### Error percentile for {model_name} model:     
+                ##### _{use.title()}_
                 """)
     st.markdown(f"""
                 ##### 50th percentile: {np.nanpercentile(np.abs(df_valid[value_col]), 50):.2f} 
@@ -290,6 +290,7 @@ st.markdown("""
 
 
 """)
+
 
 
 
