@@ -71,7 +71,7 @@ df_nan = df_city[df_city[value_col].isna()]
 
 # ---------------- Layout ----------------
 col_map, col_scatter = st.columns([1.2, 1])
-
+percentiles, guide = st.columns([1.2, 1])
 # ---------------- Map ---------------- 
 
 with col_map:
@@ -170,22 +170,36 @@ with col_scatter:
     )
 
     st.plotly_chart(fig_scatter, use_container_width=True)
+with percentiles: 
+    st.markdown(f"""
+                Error percentile for {model_name} model: {use.title()}
+                """)
+    st.markdown(f"""
+                50th percentile: {np.nanpercentile(np.abs(df_valid[value_col]), 50):.2f} 
+                """)
+    st.markdown(f"""
+                75th percentile: {np.nanpercentile(np.abs(df_valid[value_col]), 75):.2f} 
+                """)
+    st.markdown(f"""
+                90th percentile: {np.nanpercentile(np.abs(df_valid[value_col]), 90):.2f}
+                """)
+    st.markdown(f"""
+                Max: {max(np.abs(df_valid[value_col])):.2f}
+                """)
 
-st.markdown(f"""
-            Error percentile for {model_name} model: {use.title()}
-            """)
-st.markdown(f"""
-            50th percentile: {np.nanpercentile(np.abs(df_valid[value_col]), 50):.2f} 
-            """)
-st.markdown(f"""
-            75th percentile: {np.nanpercentile(np.abs(df_valid[value_col]), 75):.2f} 
-            """)
-st.markdown(f"""
-            90th percentile: {np.nanpercentile(np.abs(df_valid[value_col]), 90):.2f}
-            """)
-st.markdown(f"""
-            Max: {max(np.abs(df_valid[value_col])):.2f}
-            """)
+with guide: 
+    st.markdown(f"""
+                #### Iteraciones - Models - Uses
+| **Iteraciones**   | **Modelos**                                                        | **Usos**                             | **Total**    |
+| ----------------- | ------------------------------------------------------------------ | ------------------------------------ | -------------|
+| **A1**            | (4) Decision trees: RandomForest, XGBoost, LightGBM, CatBoost      | (3) Residential, Commercial, Office  | 12           |
+| **A2**            | (4) Decision trees (see above) with correlated variable selection  | (3) Residential, Commercial, Office  | 12           |
+| **A3**            | (4) Decision trees (see above) with outlier elimination            | (3) Residential, Commercial, Office  | 12           |
+| **B1**            | (2) Decision trees: RandomForest & XGBoost                         | (1) Residential                      | 2            |
+| **B1_pruned**     | (2) Decision trees: RandomForest & XGBoost, with parameter tuning  | (1) Residential                      | 2            |
+| **C1**            | (1) MLP: Multilayer Perceptron with transformed variables + LOG    | (2) Residential & Commercial         | 2            |
+| **C2**            | (1) MLP with base variables (no transform) + LOG                   | (2) Residential & Commercial         | 2            |
+                """)
 
 st.divider()
 st.markdown("""
@@ -275,6 +289,7 @@ st.markdown("""
 
 
 """)
+
 
 
 
