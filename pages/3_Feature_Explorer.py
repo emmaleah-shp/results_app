@@ -199,9 +199,9 @@ st.plotly_chart(fig, use_container_width=True)
 
 st.divider()
 
-feat_summary = feat_summary[
-    (feat_summary["feature_name"].isin(FEATURE_COLS))
-]
+# feat_summary = feat_summary[
+#     (feat_summary["feature_name"].isin(FEATURE_COLS))
+# ]
 
 type = st.multiselect(
     "Tipo de variable",
@@ -214,6 +214,7 @@ fs = feat_summary[
 ]
 
 st.dataframe(fs.sort_values("coverage_pct"), use_container_width=True)
+
 
 
 
