@@ -290,11 +290,13 @@ st.markdown("""
 ### Notes:
 
 ##### Variable Selection (A2 and A4): 
-        - Step 1: Create a df with all the feature correlations and filter to correlations >0.80. Select the first variable that appears in this list and eliminate the covarying feature. 
+        - Step 1: Create a df with all the feature correlations and filter to correlations >0.80. Selects the first variable that appears 
+        in this list and eliminates the covarying feature. 
             Correlated features dropped: 45 
             Number of variables after correlation filter: 42
-        - Step 2: Perform a Variance analysis (from sklearn.feature_selection) with a conservative threshold of 0.01. VarianceThreshold is a feature selector that removes all low-variance features. This feature selection algorithm looks only at the features (X), not the desired \n
-        outputs (y), and can thus be used for unsupervised learning. 
+        - Step 2: Perform a Variance analysis (from sklearn.feature_selection) with a conservative threshold of 0.01. 
+        VarianceThreshold is a feature selector that removes all low-variance features. This feature selection algorithm looks 
+        only at the features (X), not the desired outputs (y), and can thus be used for unsupervised learning. 
             Low-variance features removed: 4
             After variance filter: 38
         - Step 3: Train an importance model using XGBoost regressor to assess the importance of the 38 variables remaining after Step 2. 
@@ -334,7 +336,7 @@ st.markdown("""
         N of cells with target_office_m2 > 0 in TEST: 144, or 5.238%
         N of cells with target_office_m2 > 0 in train: 673, or 6.158%
     
-    **Stats post-outlier elimination:**
+    Stats post-outlier elimination:
         N of TEST cells: 2708        
         N of train cells: 10737        
         Total cells: 13445        
@@ -380,6 +382,7 @@ st.markdown("""
         robust to the distribution shape of the target variable and features because they work by splitting data based on 
         thresholds, rather than assuming a specific underlying distribution. 
 """)
+
 
 
 
