@@ -290,8 +290,7 @@ st.markdown("""
 ### Notes:
 
 ##### Variable Selection (A2 and A4): 
-        - Step 1: Create a df with all the feature correlations and filter to correlations >0.80. Select the first variable that appears in \n
-        this list and eliminate the covarying feature. 
+        - Step 1: Create a df with all the feature correlations and filter to correlations >0.80. Select the first variable that appears in \n this list and eliminate the covarying feature. 
             Correlated features dropped: 45 
             Number of variables after correlation filter: 42
         - Step 2: Perform a Variance analysis (from sklearn.feature_selection) with a conservative threshold of 0.01. VarianceThreshold is a \n
@@ -310,7 +309,7 @@ st.markdown("""
         - hexagons["target_office_m2"] <= 5000] # 99.751 percentile
         - hexagons["target_residential_m2"] <= 8250] #99.02 percentile
 
-    **Stats pre-outlier elimination:**
+    Stats pre-outlier elimination:
         N of TEST cells: 2749        
         N of train cells: 10928        
         Total cells: 13677        
@@ -341,24 +340,24 @@ st.markdown("""
         N of train cells: 10737        
         Total cells: 13445        
         =========RESIDENTIAL=======================================
-        Average area for target_residential_m2 TEST cells: **1231.76**
-        Average area for target_residential_m2 train cells: **1218.30**
-        Average area for target_residential_m2 TEST cells EXCLUDING 0s: **1880.27**
-        Average area for target_residential_m2 train cells EXCLUDING 0s: **7373.68**
+        Average area for target_residential_m2 TEST cells: 1231.76
+        Average area for target_residential_m2 train cells: 1218.30
+        Average area for target_residential_m2 TEST cells EXCLUDING 0s: 1880.27
+        Average area for target_residential_m2 train cells EXCLUDING 0s: 7373.68
         N of cells with target_residential_m2 > 0 in TEST: 1774, or 65.510%
         N of cells with target_residential_m2 > 0 in train: 6807, or 63.398%
         =========COMMERCIAL=======================================
-        Average area for target_commercial_m2 TEST cells: **138.39**
-        Average area for target_commercial_m2 train cells: **180.51**
-        Average area for target_commercial_m2 TEST cells EXCLUDING 0s: **958.48**
-        Average area for target_commercial_m2 train cells EXCLUDING 0s: **4956.80**
+        Average area for target_commercial_m2 TEST cells: 138.39
+        Average area for target_commercial_m2 train cells: 180.51
+        Average area for target_commercial_m2 TEST cells EXCLUDING 0s: 958.48 *
+        Average area for target_commercial_m2 train cells EXCLUDING 0s: 4956.80 *
         N of cells with target_commercial_m2 > 0 in TEST: 391, or 14.439%
         N of cells with target_commercial_m2 > 0 in train: 1750, or 16.299%
         =========OFFICE=======================================
-        Average area for target_office_m2 TEST cells: **30.46**
-        Average area for target_office_m2 train cells: **39.02**
-        Average area for target_office_m2 TEST cells EXCLUDING 0s: **634.48**
-        Average area for target_office_m2 train cells EXCLUDING 0s: **3223.03**
+        Average area for target_office_m2 TEST cells: 30.46
+        Average area for target_office_m2 train cells: 39.02
+        Average area for target_office_m2 TEST cells EXCLUDING 0s: 634.48 *
+        Average area for target_office_m2 train cells EXCLUDING 0s: 3223.03 *
         N of cells with target_office_m2 > 0 in TEST: 130, or 4.801%
         N of cells with target_office_m2 > 0 in train: 601, or 5.597%    
 
@@ -382,6 +381,7 @@ st.markdown("""
         robust to the distribution shape of the target variable and features because they work by splitting data based on 
         thresholds, rather than assuming a specific underlying distribution. 
 """)
+
 
 
 
