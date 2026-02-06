@@ -176,16 +176,17 @@ fig = px.histogram(
     title=f"Distribución de {value_col}",
 )
 
-mean_val = gdf[value_col].mean()
+if scale != "LISA Clusters":
+    mean_val = gdf[value_col].mean()
 
-fig.add_vline(
-    x=mean_val,
-    line_width=2,
-    line_dash="dash",
-    line_color="red",
-    annotation_text="Media",
-    annotation_position="top"
-)
+    fig.add_vline(
+        x=mean_val,
+        line_width=2,
+        line_dash="dash",
+        line_color="red",
+        annotation_text="Media",
+        annotation_position="top"
+    )
 
 
 fig.update_layout(
@@ -213,6 +214,7 @@ fs = feat_summary[
 ]
 
 st.dataframe(fs.sort_values("coverage_pct"), use_container_width=True)
+
 
 
 
