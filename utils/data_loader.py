@@ -20,8 +20,9 @@ def load_feature_summary():
         "data/feature_summary_for_team.csv"
     )
     
-    df = df.iloc[:, 1:7]
+    # df = df.iloc[:, 1:7]
 
     return df
+
 
 
