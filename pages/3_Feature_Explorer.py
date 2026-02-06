@@ -176,22 +176,6 @@ fig = px.histogram(
     title=f"Distribución de {value_col}",
 )
 
-# KDE line
-values = gdf[value_col].dropna()
-kde = gaussian_kde(values)
-x_range = np.linspace(values.min(), values.max(), 300)
-y_kde = kde(x_range)
-
-fig.add_trace(
-    go.Scatter(
-        x=x_range,
-        y=y_kde,
-        mode="lines",
-        name="KDE",
-        line=dict(color="red", width=2),
-    )
-)
-
 mean_val = gdf[value_col].mean()
 
 fig.add_vline(
@@ -229,6 +213,7 @@ fs = feat_summary[
 ]
 
 st.dataframe(fs.sort_values("coverage_pct"), use_container_width=True)
+
 
 
 
