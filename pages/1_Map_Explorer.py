@@ -290,14 +290,19 @@ st.markdown("""
 ### Notes:
 
 ##### Variable Selection (A2 and A4): 
-        - Step 1: Create a df with all the feature correlations and filter to correlations >0.80. Select the first variable that appears in this list and eliminate the covarying feature. 
+        - Step 1: Create a df with all the feature correlations and filter to correlations >0.80. Select the first variable that appears in \n
+        this list and eliminate the covarying feature. 
             Correlated features dropped: 45 
             Number of variables after correlation filter: 42
-        - Step 2: Perform a Variance analysis (from sklearn.feature_selection) with a conservative threshold of 0.01. VarianceThreshold is a feature selector that removes all low-variance features. This feature selection algorithm looks only at the features (X), not the desired outputs (y), and can thus be used for unsupervised learning. 
+        - Step 2: Perform a Variance analysis (from sklearn.feature_selection) with a conservative threshold of 0.01. VarianceThreshold is a \n
+        feature selector that removes all low-variance features. This feature selection algorithm looks only at the features (X), not the desired \n
+        outputs (y), and can thus be used for unsupervised learning. 
             Low-variance features removed: 4
             After variance filter: 38
-        - Step 3: Train an importance model using XGBoost regressor to assess the importance of the 38 variables remaining after Step 2. Output is a df with importance values, which were ranked. 
-        - Step 4: Manually select the features based on the two prior analyses, plus a contextual understanding of inputs as well as previous correlation analysis between each of the targets and the features. 
+        - Step 3: Train an importance model using XGBoost regressor to assess the importance of the 38 variables remaining after Step 2. \n
+        Output is a df with importance values, which were ranked. 
+        - Step 4: Manually select the features based on the two prior analyses, plus a contextual understanding of inputs as well as previous \n
+        correlation analysis between each of the targets and the features. 
         See Feature Explorer for more details.
 
 ##### Outlier Elimination (A3 and A4): 
@@ -305,57 +310,57 @@ st.markdown("""
         - hexagons["target_office_m2"] <= 5000] # 99.751 percentile
         - hexagons["target_residential_m2"] <= 8250] #99.02 percentile
 
-    **_Stats pre-outlier elimination:_**
-        N of TEST cells: 2749        
-        N of train cells: 10928        
-        Total cells: 13677        
-        =========RESIDENTIAL=======================================
-        Average area for target_residential_m2 TEST cells: 1305.72
-        Average area for target_residential_m2 train cells: 1327.23
-        Average area for target_residential_m2 TEST cells EXCLUDING 0s: 1990.81
-        Average area for target_residential_m2 train cells EXCLUDING 0s: 8044.35
-        N of cells with target_residential_m2 > 0 in TEST: 1803, or 65.587%
-        N of cells with target_residential_m2 > 0 in train: 6971, or 63.790%
-        =========COMMERCIAL=======================================
-        Average area for target_commercial_m2 TEST cells: 252.93
-        Average area for target_commercial_m2 train cells: 291.62
-        Average area for target_commercial_m2 TEST cells EXCLUDING 0s: 1671.40
-        Average area for target_commercial_m2 train cells EXCLUDING 0s: 7660.54
-        N of cells with target_commercial_m2 > 0 in TEST: 416, or 15.133%
-        N of cells with target_commercial_m2 > 0 in train: 1881, or 17.213%
-        =========OFFICE=======================================
-        Average area for target_office_m2 TEST cells: 53.94
-        Average area for target_office_m2 train cells: 63.28
-        Average area for target_office_m2 TEST cells EXCLUDING 0s: 1029.67
-        Average area for target_office_m2 train cells EXCLUDING 0s: 4801.90
-        N of cells with target_office_m2 > 0 in TEST: 144, or 5.238%
-        N of cells with target_office_m2 > 0 in train: 673, or 6.158%
+**Stats pre-outlier elimination:**
+    N of TEST cells: 2749        
+    N of train cells: 10928        
+    Total cells: 13677        
+    =========RESIDENTIAL=======================================
+    Average area for target_residential_m2 TEST cells: 1305.72
+    Average area for target_residential_m2 train cells: 1327.23
+    Average area for target_residential_m2 TEST cells EXCLUDING 0s: 1990.81
+    Average area for target_residential_m2 train cells EXCLUDING 0s: 8044.35
+    N of cells with target_residential_m2 > 0 in TEST: 1803, or 65.587%
+    N of cells with target_residential_m2 > 0 in train: 6971, or 63.790%
+    =========COMMERCIAL=======================================
+    Average area for target_commercial_m2 TEST cells: 252.93
+    Average area for target_commercial_m2 train cells: 291.62
+    Average area for target_commercial_m2 TEST cells EXCLUDING 0s: 1671.40
+    Average area for target_commercial_m2 train cells EXCLUDING 0s: 7660.54
+    N of cells with target_commercial_m2 > 0 in TEST: 416, or 15.133%
+    N of cells with target_commercial_m2 > 0 in train: 1881, or 17.213%
+    =========OFFICE=======================================
+    Average area for target_office_m2 TEST cells: 53.94
+    Average area for target_office_m2 train cells: 63.28
+    Average area for target_office_m2 TEST cells EXCLUDING 0s: 1029.67
+    Average area for target_office_m2 train cells EXCLUDING 0s: 4801.90
+    N of cells with target_office_m2 > 0 in TEST: 144, or 5.238%
+    N of cells with target_office_m2 > 0 in train: 673, or 6.158%
 
-    **_Stats post-outlier elimination:_**
-        N of TEST cells: 2708        
-        N of train cells: 10737        
-        Total cells: 13445        
-        =========RESIDENTIAL=======================================
-        Average area for target_residential_m2 TEST cells: **1231.76**
-        Average area for target_residential_m2 train cells: **1218.30**
-        Average area for target_residential_m2 TEST cells EXCLUDING 0s: **1880.27**
-        Average area for target_residential_m2 train cells EXCLUDING 0s: **7373.68**
-        N of cells with target_residential_m2 > 0 in TEST: 1774, or 65.510%
-        N of cells with target_residential_m2 > 0 in train: 6807, or 63.398%
-        =========COMMERCIAL=======================================
-        Average area for target_commercial_m2 TEST cells: **138.39**
-        Average area for target_commercial_m2 train cells: **180.51**
-        Average area for target_commercial_m2 TEST cells EXCLUDING 0s: **958.48**
-        Average area for target_commercial_m2 train cells EXCLUDING 0s: **4956.80**
-        N of cells with target_commercial_m2 > 0 in TEST: 391, or 14.439%
-        N of cells with target_commercial_m2 > 0 in train: 1750, or 16.299%
-        =========OFFICE=======================================
-        Average area for target_office_m2 TEST cells: **30.46**
-        Average area for target_office_m2 train cells: **39.02**
-        Average area for target_office_m2 TEST cells EXCLUDING 0s: **634.48**
-        Average area for target_office_m2 train cells EXCLUDING 0s: **3223.03**
-        N of cells with target_office_m2 > 0 in TEST: 130, or 4.801%
-        N of cells with target_office_m2 > 0 in train: 601, or 5.597%
+**Stats post-outlier elimination:**
+    N of TEST cells: 2708        
+    N of train cells: 10737        
+    Total cells: 13445        
+    =========RESIDENTIAL=======================================
+    Average area for target_residential_m2 TEST cells: **1231.76**
+    Average area for target_residential_m2 train cells: **1218.30**
+    Average area for target_residential_m2 TEST cells EXCLUDING 0s: **1880.27**
+    Average area for target_residential_m2 train cells EXCLUDING 0s: **7373.68**
+    N of cells with target_residential_m2 > 0 in TEST: 1774, or 65.510%
+    N of cells with target_residential_m2 > 0 in train: 6807, or 63.398%
+    =========COMMERCIAL=======================================
+    Average area for target_commercial_m2 TEST cells: **138.39**
+    Average area for target_commercial_m2 train cells: **180.51**
+    Average area for target_commercial_m2 TEST cells EXCLUDING 0s: **958.48**
+    Average area for target_commercial_m2 train cells EXCLUDING 0s: **4956.80**
+    N of cells with target_commercial_m2 > 0 in TEST: 391, or 14.439%
+    N of cells with target_commercial_m2 > 0 in train: 1750, or 16.299%
+    =========OFFICE=======================================
+    Average area for target_office_m2 TEST cells: **30.46**
+    Average area for target_office_m2 train cells: **39.02**
+    Average area for target_office_m2 TEST cells EXCLUDING 0s: **634.48**
+    Average area for target_office_m2 train cells EXCLUDING 0s: **3223.03**
+    N of cells with target_office_m2 > 0 in TEST: 130, or 4.801%
+    N of cells with target_office_m2 > 0 in train: 601, or 5.597%    
 
 ##### B1 Parameter choices: 
         - RandomizedSearchCV
@@ -377,6 +382,7 @@ st.markdown("""
         robust to the distribution shape of the target variable and features because they work by splitting data based on 
         thresholds, rather than assuming a specific underlying distribution. 
 """)
+
 
 
 
