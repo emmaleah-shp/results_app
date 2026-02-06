@@ -163,17 +163,45 @@ with col2:
 
 # Histogram
 fig = px.histogram(
-    gdf, # to use data filtered by city, use df
+    gdf,
     x=value_col,
     nbins=bins,
     histnorm="probability density" if normalize else None,
-    marginal="box",               # shows boxplot above histogram
+    marginal="box",
     template="plotly_white",
     title=f"Distribución de {value_col}",
 )
 
+# KDE line
+values = gdf[value_col].dropna()
+kde = gaussian_kde(values)
+x_range = np.linspace(values.min(), values.max(), 300)
+y_kde = kde(x_range)
+
+fig.add_trace(
+    go.Scatter(
+        x=x_range,
+        y=y_kde,
+        mode="lines",
+        name="KDE",
+        line=dict(color="red", width=2),
+    )
+)
+
+mean_val = gdf[value_col].mean()
+
+fig.add_vline(
+    x=mean_val,
+    line_width=2,
+    line_dash="dash",
+    line_color="red",
+    annotation_text="Media",
+    annotation_position="top"
+)
+
+
 fig.update_layout(
-    bargap=0.05,
+    bargap=0,
     xaxis_title=value_col,
     yaxis_title="Densidad" if normalize else "Conteo",
 )
@@ -197,6 +225,7 @@ fs = feat_summary[
 ]
 
 st.dataframe(fs.sort_values("coverage_pct"), use_container_width=True)
+
 
 
 
