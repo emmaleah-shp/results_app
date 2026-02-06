@@ -290,17 +290,16 @@ st.markdown("""
 ### Notes:
 
 ##### Variable Selection (A2 and A4): 
-        - Step 1: Create a df with all the feature correlations and filter to correlations >0.80. Select the first variable that appears in \n this list and eliminate the covarying feature. 
+        - Step 1: Create a df with all the feature correlations and filter to correlations >0.80. Select the first variable that appears in this list and eliminate the covarying feature. 
             Correlated features dropped: 45 
             Number of variables after correlation filter: 42
-        - Step 2: Perform a Variance analysis (from sklearn.feature_selection) with a conservative threshold of 0.01. VarianceThreshold is a \n
-        feature selector that removes all low-variance features. This feature selection algorithm looks only at the features (X), not the desired \n
+        - Step 2: Perform a Variance analysis (from sklearn.feature_selection) with a conservative threshold of 0.01. VarianceThreshold is a feature selector that removes all low-variance features. This feature selection algorithm looks only at the features (X), not the desired \n
         outputs (y), and can thus be used for unsupervised learning. 
             Low-variance features removed: 4
             After variance filter: 38
-        - Step 3: Train an importance model using XGBoost regressor to assess the importance of the 38 variables remaining after Step 2. \n
+        - Step 3: Train an importance model using XGBoost regressor to assess the importance of the 38 variables remaining after Step 2. 
         Output is a df with importance values, which were ranked. 
-        - Step 4: Manually select the features based on the two prior analyses, plus a contextual understanding of inputs as well as previous \n
+        - Step 4: Manually select the features based on the two prior analyses, plus a contextual understanding of inputs as well as previous 
         correlation analysis between each of the targets and the features. 
         See Feature Explorer for more details.
 
@@ -381,6 +380,7 @@ st.markdown("""
         robust to the distribution shape of the target variable and features because they work by splitting data based on 
         thresholds, rather than assuming a specific underlying distribution. 
 """)
+
 
 
 
