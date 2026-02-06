@@ -1,6 +1,10 @@
 import streamlit as st
 import plotly.express as px
 from utils.data_loader import load_gdf_features, load_feature_summary
+import numpy as np
+from scipy.stats import gaussian_kde
+import plotly.graph_objects as go
+
 LISA_COLORS = {
     "High-High": "#d7191c",
     "Low-Low": "#2c7bb6",
@@ -225,6 +229,7 @@ fs = feat_summary[
 ]
 
 st.dataframe(fs.sort_values("coverage_pct"), use_container_width=True)
+
 
 
 
