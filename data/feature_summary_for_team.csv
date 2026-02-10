@@ -1,8 +1,8 @@
 ﻿index,feature_name,description,feature_type,data_range,non_zero_count,coverage_pct,corr_variance_threshold,importance,corr_residential,corr_commercial,corr_office,score,select,a1,a2,a3,a4
 1,h3_id,Unique id of the hexagon,identification,non-numeric,13677,100,0,0,0,0,0,0,0,0,0,0,0
 2,city,Name of the city the cell is in,identification,non-numeric,13677,100,0,0,0,0,0,0,0,0,0,0,0
-3,feat_plaza_dx,"Distance of hexagon centroid from the central plaza of the city, 'x'; if centroid intersects the plaza, value is 0.0",geometry,-7510.40 to 7443.34,13677,100,1,0.005525,0,0,0,2,1,1,1,1,1
-4,feat_plaza_dy,"Distance of hexagon centroid from the central plaza of the city, 'y'; if centroid intersects the plaza, value is 0.0",geometry,-7531.28 to 8618.13,13677,100,1,0.008026,0,0,0,2,1,1,1,1,1
+3,feat_plaza_dx,"Distance of hexagon centroid from the central plaza of the city, 'x'; if centroid intersects the plaza, value is 0.0","morphology, built area",-7510.40 to 7443.34,13677,100,1,0.005525,0,0,0,2,1,1,1,1,1
+4,feat_plaza_dy,"Distance of hexagon centroid from the central plaza of the city, 'y'; if centroid intersects the plaza, value is 0.0","morphology, built area",-7531.28 to 8618.13,13677,100,1,0.008026,0,0,0,2,1,1,1,1,1
 5,feat_building_count,Number of buildings in hexagon,"morphology, built area",0.00 to 108.00,11596,84.784675,1,0.222639,1,0,0,4,1,1,1,1,1
 6,feat_total_footprint_area,Area covered by buildings in cell,"morphology, built area",0.00 to 28577.00,11596,84.784675,1,0.161847,1,1,0,5,1,1,1,1,1
 7,feat_mean_building_area,Average building footprint size,"morphology, built area",0.00 to 27564.96,11596,84.784675,1,0.010223,0,1,0,3,1,1,1,1,1
