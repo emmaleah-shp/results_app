@@ -4,11 +4,11 @@ import streamlit as st
 
 @st.cache_data
 def load_gdf():
-    return gpd.read_parquet("data/error_results_a_b_c.geoparquet")
+    return gpd.read_parquet("data/error_results_all.geoparquet")
 
 @st.cache_data
 def load_metrics():
-    return pd.read_csv("data/model_metrics.csv")
+    return pd.read_excel("data/model_comparison_results.xlsx") 
 
 @st.cache_data
 def load_gdf_features():
@@ -23,6 +23,7 @@ def load_feature_summary():
     # df = df.iloc[:, 1:7]
 
     return df
+
 
 
 
