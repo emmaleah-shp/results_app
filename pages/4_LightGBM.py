@@ -6,39 +6,144 @@ from utils.data_loader import load_metrics
 st.title("Model Selected: Light GBM")
 
 st.markdown("""
-### Explicación de iteración y modelos:
+## Model Overview: Hierarchical LightGBM Regression
 
-##### **Hierarchical LightGBM (Binary + Regression)**
+### Purpose
+This model estimates built area (m²) by land-use category at the hexagon level.  
+Many hexagons contain **no area for a given land use**, while others contain **highly skewed, continuous values**.  
+To address this, the model separates **presence detection** from **area estimation** using a hierarchical approach.
 
-Many hexagons are either almost entirely residential or contain residential use alongside several smaller non-residential components. These two regimes exhibit very different relationships between features and land-use intensity, and treating them with a single regression model leads to systematic bias. To address the strong zero-inflation and class imbalance present in the land-use targets we employ a hierarchical (hurdle) modeling strategy using LightGBM decision trees.      
+---
 
-**Architecture:**
+### Model Architecture
 
-For each land-use category, we first train a binary classifier to predict whether each land-use category is present in a hexagon (m² > 0). This explicitly separates the detection problem (does this use exist here?) from the intensity problem (how much area is present if it exists). This is particularly important for residential use, which is more common overall but still appears alongside other uses in mixed-use hexagons. Conditional on presence, we then train a regression model only on hexagons where the use exists (according to the classifier which reaches over 95% accuracy), predicting the log-transformed built area to reduce skewness and stabilize variance (reduce the influence of extreme values). The final prediction is computed as the probability of presence multiplied by the predicted area, yielding a continuous expected m² value.
+For each land-use category, the model is trained in **two stages**:
 
-**LGBM:**		
+**1. Presence Detection (Binary Classification)**  
+- Predicts whether a land use is present in a hexagon (m² > 0)
+- Handles strong class imbalance and zero-inflation
+- Outputs a probability of presence
 
-In the first stage, a LightGBM classifier predicts whether a given land use is present in a hexagon. In the second stage, a LightGBM regressor is trained only on positive samples to predict log-transformed built area, which is then converted back to m² space.        
+**2. Area Estimation (Conditional Regression)**  
+- Trained only on hexagons where the land use exists
+- Predicts log-transformed built area
+- Log transformation reduces skewness and limits the influence of extreme values
 
-This approach replaces bagged trees with gradient-boosted decision trees, allowing for more efficient learning of complex nonlinear interactions with fewer trees and better handling of feature interactions. This model does not introduce an additional residential-dominance split; instead, it treats all hexagons uniformly within each land-use–specific model. This means the model is simpler and more directly comparable to the baseline hierarchical approach, while leveraging LightGBM’s speed and regularization to improve performance and scalability.
-
-| Model ID | Model Type    | Hierarchical Strategy                            | Key Stages                                                                                            | Strengths                                                                      | Limitations                                                                                       |
-| -------- | ------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
-| **A#.1** | Random Forest | Binary → Regression (per use)                    | (1) RF classifier for presence<br>(2) RF regressor on log(m²) for positives                           | Simple, interpretable, robust baseline<br>Handles nonlinearities well          | Less efficient at modeling complex interactions<br>Can underperform with many correlated features |
-| **A#.2** | XGBoost       | Residential dominance split + per-use regression | (1) Classify residential dominance<br>(2) Separate regressors for residential-dominant vs mixed hexes | Explicitly encodes land-use hierarchy<br>Addresses residential underestimation | Most complex pipeline<br>Higher risk of error propagation                                         |
-| **A#.3** | _LightGBM_    | Binary → Regression (per use)                    | (1) LGBM classifier for presence<br>(2) LGBM regressor on log(m²)                                     | Fast, scalable, strong performance<br>Efficient gradient boosting              | Less interpretable than RF<br>No explicit residential hierarchy                                   |
-| **A#.4** | CatBoost      | Binary → Regression (per use)                    | (1) CatBoost classifier with class weights<br>(2) CatBoost regressor on log(m²)                       | Robust to noisy features<br>Stable training, minimal preprocessing             | Slower than LightGBM<br>Less transparent model internals                                          |
+**Final Prediction**  
+The expected built area is computed as:
 
 """)
 
 st.divider()
 st.markdown(""" 
-| Model ID | Model Type    | Hierarchical Strategy                            | Key Stages                                                                                            | Strengths                                                                      | Limitations                                                                                       |
-| -------- | ------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
-| **A#.1** | Random Forest | Binary → Regression (per use)                    | (1) RF classifier for presence<br>(2) RF regressor on log(m²) for positives                           | Simple, interpretable, robust baseline<br>Handles nonlinearities well          | Less efficient at modeling complex interactions<br>Can underperform with many correlated features |
-| **A#.2** | XGBoost       | Residential dominance split + per-use regression | (1) Classify residential dominance<br>(2) Separate regressors for residential-dominant vs mixed hexes | Explicitly encodes land-use hierarchy<br>Addresses residential underestimation | Most complex pipeline<br>Higher risk of error propagation                                         |
-| **A#.3** | LightGBM      | Binary → Regression (per use)                    | (1) LGBM classifier for presence<br>(2) LGBM regressor on log(m²)                                     | Fast, scalable, strong performance<br>Efficient gradient boosting              | Less interpretable than RF<br>No explicit residential hierarchy                                   |
-| **A#.4** | CatBoost      | Binary → Regression (per use)                    | (1) CatBoost classifier with class weights<br>(2) CatBoost regressor on log(m²)                       | Robust to noisy features<br>Stable training, minimal preprocessing             | Slower than LightGBM<br>Less transparent model internals                                          |
 
+This yields a continuous estimate while preserving realistic sparsity.
 
+---
+
+### Why LightGBM?
+
+LightGBM is well suited to this problem because it:
+
+- Efficiently learns **nonlinear relationships and feature interactions**
+- Handles **sparse and imbalanced targets** effectively
+- Scales well when training **separate models per land-use category**
+- Includes regularization to reduce overfitting in high-dimensional feature spaces
+
+Compared to bagged tree methods, gradient boosting achieves similar or better accuracy with fewer trees and lower computational cost.
+
+---
+
+### Simplified Model Behavior
+
+In plain terms, the model:
+
+- First asks **“Does this land use exist here?”**
+- If yes, estimates **“How much area does it occupy?”**
+- Applies the same logic consistently across all hexagons
+- Limits the influence of extreme values
+- Produces interpretable, stable predictions for mixed-use areas
+
+---
+
+### Model Variants Considered
+
+| Model ID | Model Type | Hierarchical Strategy | Strengths | Limitations |
+|--------|-----------|----------------------|-----------|-------------|
+| A#.1 | Random Forest | Binary → Regression | Simple, interpretable baseline | Less efficient for complex interactions |
+| A#.2 | XGBoost | Residential dominance split | Encodes explicit hierarchy | Most complex pipeline |
+| **A#.3** | **LightGBM** | **Binary → Regression** | **Fast, scalable, stable** | **Less interpretable than RF** |
+| A#.4 | CatBoost | Binary → Regression | Robust to noisy features | Slower, less transparent |
+
+---
+
+### Design Rationale
+
+The LightGBM hierarchical model was selected to balance:
+
+- Modeling accuracy
+- Computational efficiency
+- Pipeline simplicity
+- Reproducibility across land-use categories
+
+This structure avoids unnecessary branching while explicitly addressing zero-inflation and mixed-use hexagons.
 """)
+st.divider()
+st.markdown(""" 
+### Hyperparameter Optimization with FLAML
+
+Model performance and stability depend not only on the model structure, but also on the choice of hyperparameters (e.g., tree depth, learning rate, number of leaves).  
+To avoid manual tuning and to ensure reproducibility, hyperparameter selection is handled automatically using **FLAML**.
+
+---
+
+#### What FLAML Does
+
+FLAML (Fast Lightweight AutoML) performs **automated hyperparameter search** with a focus on:
+
+- Efficient exploration of the hyperparameter space
+- Strong performance under limited time or compute budgets
+- Avoiding overfitting through early stopping and adaptive search
+
+Rather than exhaustively searching all parameter combinations, FLAML prioritizes promising configurations based on observed performance, allowing it to converge quickly to well-performing settings.
+
+---
+
+#### How FLAML Is Used in This Pipeline
+
+For each LightGBM model (classifier and regressor):
+
+- FLAML searches over a predefined range of LightGBM hyperparameters
+- Model performance is evaluated using cross-validation on the training data
+- Poor-performing configurations are discarded early
+- The best-performing configuration is selected and fixed for training
+
+This process is applied independently for:
+- Presence (binary classification) models
+- Conditional area (regression) models
+
+---
+
+#### Why FLAML Was Chosen
+
+FLAML was selected because it:
+
+- Reduces the need for manual hyperparameter tuning
+- Produces consistent and reproducible model configurations
+- Is computationally efficient compared to grid or random search
+- Integrates directly with LightGBM
+
+This allows the modeling pipeline to focus on **structure and data design**, while hyperparameter tuning is handled in a principled and automated way.
+
+---
+
+#### Simplified Explanation
+
+In simple terms:
+
+- FLAML automatically tests different LightGBM settings
+- Keeps the ones that work well
+- Stops searching once further improvements are unlikely
+- Ensures the final model is well-tuned without excessive trial-and-error
+""")
+
