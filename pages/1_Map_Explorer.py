@@ -2,11 +2,10 @@ import streamlit as st
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
-from utils.data_loader import load_gdf, load_base_gdf
+from utils.data_loader import load_gdf
 from utils.constants import MODEL_ITERS, CITIES, USES
 
-st.title("Map & Prediction Explorer")  
-gdf = load_base_gdf()
+st.title("Map & Prediction Explorer")   
 # ---------------- Sidebar ----------------
 st.sidebar.header("Filtros espaciales")
 city = st.sidebar.selectbox("City", CITIES)
@@ -344,6 +343,7 @@ st.markdown("""
         robust to the distribution shape of the target variable and features because they work by splitting data based on 
         thresholds, rather than assuming a specific underlying distribution. 
 """)
+
 
 
 
