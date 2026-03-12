@@ -3,22 +3,22 @@ import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 from utils.data_loader import load_gdf
-from utils.constants import MODEL_ITERS, MODELS, USES
-
-gdf = load_gdf()
+from utils.constants import MODEL_ITERS, CITIES, USES
 
 st.title("Map & Prediction Explorer")
+# gdf = load_gdf()
 
 # ---------------- Sidebar ----------------
 st.sidebar.header("Filtros espaciales")
 
-cities = sorted(gdf["city"].dropna().unique())
-city = st.sidebar.selectbox("City", cities)
+city = st.sidebar.selectbox("City", CITIES)
+scale = st.sidebar.radio("Escala", ["H9", "H10"])
 
+if city == "medellin":
+    
 st.sidebar.header("Selección del modelo")
 
-model_iter = st.sidebar.selectbox("Iteración del modelo", MODEL_ITERS)
-model = st.sidebar.selectbox("Modelo", MODELS)
+model_iter = st.sidebar.selectbox("Iteración del modelo", MODEL_ITERS) 
 use = st.sidebar.selectbox("Uso del suelo", USES)
 var_type = st.sidebar.radio("Tipo variable", ["error", "predicción", "true"])
 
@@ -382,6 +382,7 @@ st.markdown("""
         robust to the distribution shape of the target variable and features because they work by splitting data based on 
         thresholds, rather than assuming a specific underlying distribution. 
 """)
+
 
 
 
