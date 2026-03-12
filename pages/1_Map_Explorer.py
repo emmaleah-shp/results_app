@@ -9,29 +9,10 @@ st.title("Map & Prediction Explorer")
 # ---------------- Sidebar ----------------
 st.sidebar.header("Filtros espaciales")
 
-city = st.sidebar.selectbox("City", CITIES) # 
-scale = st.sidebar.radio("Escala", ["h9", "h10"])
-
-if city == "medellin" or city == "pucon" or city == "curico":
-    place = "all"
-else: 
-    place = city
-
-import streamlit as st
-import numpy as np
-import plotly.express as px
-import plotly.graph_objects as go
-from utils.data_loader import load_gdf
-from utils.constants import MODEL_ITERS, CITIES, USES
-
-st.title("Map & Prediction Explorer")  
-# ---------------- Sidebar ----------------
-st.sidebar.header("Filtros espaciales")
-
 city = st.sidebar.selectbox("City", CITIES)
 scale = st.sidebar.radio("Escala", ["h9", "h10"])
 
-if city == "medellin" or city == "pucon" or city == "curico":
+if city in ["medellin","pucon","curico"]:
     place = "all"
 else: 
     place = city
@@ -65,7 +46,7 @@ elif var_type == "error":
         hover_col = f"flaml_{city}_{use}_{model_iter}_pred_m2"
 elif var_type == "true":
     value_col = target_col
-    if city == "all":
+    if place == "all":
         hover_col = f"flaml_{use}_{model_iter}_pred_m2"
     else:
         hover_col = f"flaml_{city}_{use}_{model_iter}_pred_m2"
@@ -714,6 +695,7 @@ st.markdown("""
         robust to the distribution shape of the target variable and features because they work by splitting data based on 
         thresholds, rather than assuming a specific underlying distribution. 
 """)
+
 
 
 
