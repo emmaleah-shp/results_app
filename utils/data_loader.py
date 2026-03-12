@@ -4,7 +4,9 @@ import streamlit as st
 
 @st.cache_data
 def load_gdf(place, scale):
-    return gpd.read_parquet(f"data/error_results_{place}_{scale}.geoparquet")
+    return gpd.read_parquet(
+        f"data/error_results_{place}_{scale}.geoparquet"
+    )
 
 @st.cache_data
 def load_metrics():
@@ -23,6 +25,7 @@ def load_feature_summary():
     # df = df.iloc[:, 1:7]
 
     return df
+
 
 
 
