@@ -14,7 +14,7 @@ scale = st.sidebar.radio("Escala", ["h9", "h10"])
 if city in ["medellin","pucon","curico"]:
     place = "all"
 else: 
-    place = city.copy()
+    place = f"{city}"
 
 gdf = load_gdf(place, scale)
 
@@ -343,6 +343,7 @@ st.markdown("""
         robust to the distribution shape of the target variable and features because they work by splitting data based on 
         thresholds, rather than assuming a specific underlying distribution. 
 """)
+
 
 
 
