@@ -6,12 +6,14 @@ from utils.data_loader import load_gdf
 from utils.constants import MODEL_ITERS, CITIES, USES
 
 st.title("Map & Prediction Explorer") 
-
+place = "all"
+scale = "h9
+gdf = load_gdf(place, scale)
 # ---------------- Sidebar ----------------
 st.sidebar.header("Filtros espaciales")
 
 city = st.sidebar.selectbox("City", CITIES)
-scale = st.sidebar.radio("Escala", ["H9", "H10"])
+scale = st.sidebar.radio("Escala", ["h9", "h10"])
 
 if city == "medellin" or city == "pucon" or city == "curico":
     place = "all"
@@ -345,6 +347,7 @@ st.markdown("""
         robust to the distribution shape of the target variable and features because they work by splitting data based on 
         thresholds, rather than assuming a specific underlying distribution. 
 """)
+
 
 
 
