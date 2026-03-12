@@ -50,14 +50,14 @@ var_type = st.sidebar.radio("Tipo variable", ["error", "predicción", "true"])
 target_col = f"target_{use}_m2"
 
 if var_type == "predicción":
-    if city == "all":
+    if place == "all":
         value_col = f"flaml_{use}_{model_iter}_pred_m2"
         hover_col = f"flaml_{use}_{model_iter}_error"
     else:
         value_col = f"flaml_{city}_{use}_{model_iter}_pred_m2"
         hover_col = f"flaml_{city}_{use}_{model_iter}_error"
 elif var_type == "error":
-    if city == "all":
+    if place == "all":
         value_col = f"flaml_{use}_{model_iter}_error"
         hover_col = f"flaml_{use}_{model_iter}_pred_m2"
     else:
@@ -175,7 +175,7 @@ with col_map:
 # ---------------- Scatter ----------------
 with col_scatter:
     st.subheader("True vs Predicted")
-    if city == "all":
+    if place == "all":
         pred_col = f"flaml_{use}_{model_iter}_pred_m2"
     else:
         pred_col = f"flaml_{city}_{use}_{model_iter}_pred_m2"
@@ -714,6 +714,7 @@ st.markdown("""
         robust to the distribution shape of the target variable and features because they work by splitting data based on 
         thresholds, rather than assuming a specific underlying distribution. 
 """)
+
 
 
 
