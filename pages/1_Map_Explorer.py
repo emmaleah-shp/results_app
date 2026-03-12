@@ -8,8 +8,6 @@ from utils.constants import MODEL_ITERS, CITIES, USES
 st.title("Map & Prediction Explorer")  
 # ---------------- Sidebar ----------------
 st.sidebar.header("Filtros espaciales")
-city = "temuco"
-scale = "h10"
 city = st.sidebar.selectbox("City", CITIES)
 scale = st.sidebar.radio("Escala", ["h9", "h10"])
 
@@ -696,6 +694,7 @@ st.markdown("""
         robust to the distribution shape of the target variable and features because they work by splitting data based on 
         thresholds, rather than assuming a specific underlying distribution. 
 """)
+
 
 
 
