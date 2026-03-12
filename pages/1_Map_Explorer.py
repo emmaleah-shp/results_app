@@ -9,7 +9,7 @@ st.title("Map & Prediction Explorer")
 # ---------------- Sidebar ----------------
 st.sidebar.header("Filtros espaciales")
 city = st.sidebar.selectbox("City", CITIES)
-scale = st.sidebar.radio("Escala", ["h9", "h10"])
+scale = st.sidebar.radio("Escala", ["h10", "h9"])
 
 if city in ["medellin","pucon","curico"]:
     place = city 
@@ -24,31 +24,65 @@ model_iter = st.sidebar.selectbox("Iteración del modelo", MODEL_ITERS)
 use = st.sidebar.selectbox("Uso del suelo", USES)
 var_type = st.sidebar.radio("Tipo variable", ["error", "predicción", "true"])
 
+# all = flaml_residential_a1_pred_h9_error
+# curico = flaml_curico_residential_a1_pred_h9_error
+# pucon = flaml_pucon_residential_a1_pred_h9_error
+# medellin = flaml_medellin_residential_a1_pred_h9_error
+
+# all = flaml_residential_a1_pred_m2
+# curico = flaml_curico_residential_a1_pred_m2
+# pucon = flaml_pucon_residential_a1_pred_m2
+# medellin = flaml_medellin_residential_a1_pred_m2
 
 
 # ---------------- Column logic ----------------
 target_col = f"target_{use}_m2"
-
-if var_type == "predicción":
-    if place == "all":
-        value_col = f"flaml_{use}_{model_iter}_pred_m2"
-        hover_col = f"flaml_{use}_{model_iter}_error"
-    else:
-        value_col = f"flaml_{city}_{use}_{model_iter}_pred_m2"
-        hover_col = f"flaml_{city}_{use}_{model_iter}_error"
-elif var_type == "error":
-    if place == "all":
-        value_col = f"flaml_{use}_{model_iter}_error"
-        hover_col = f"flaml_{use}_{model_iter}_pred_m2"
-    else:
-        value_col = f"flaml_{city}_{use}_{model_iter}_error"
-        hover_col = f"flaml_{city}_{use}_{model_iter}_pred_m2"
-elif var_type == "true":
-    value_col = target_col
-    if place == "all":
-        hover_col = f"flaml_{use}_{model_iter}_pred_m2"
-    else:
-        hover_col = f"flaml_{city}_{use}_{model_iter}_pred_m2"
+if scale == "h10":
+    if var_type == "predicción":
+        if place == "all":
+            value_col = f"flaml_{use}_{model_iter}_pred_m2"
+            hover_col = f"flaml_{use}_{model_iter}_error"
+        else:
+            value_col = f"flaml_{city}_{use}_{model_iter}_pred_m2"
+            hover_col = f"flaml_{city}_{use}_{model_iter}_error"
+    elif var_type == "error":
+        if place == "all":
+            value_col = f"flaml_{use}_{model_iter}_error"
+            hover_col = f"flaml_{use}_{model_iter}_pred_m2"
+        else:
+            value_col = f"flaml_{city}_{use}_{model_iter}_error"
+            hover_col = f"flaml_{city}_{use}_{model_iter}_pred_m2"
+    elif var_type == "true":
+        value_col = target_col
+        if place == "all":
+            hover_col = f"flaml_{use}_{model_iter}_pred_m2"
+        else:
+            hover_col = f"flaml_{city}_{use}_{model_iter}_pred_m2"
+elif scale == "h9":
+    if var_type == "predicción":
+        if place == "all":
+            value_col = f"flaml_{use}_{model_iter}_pred_m2"
+            hover_col = f"flaml_{use}_{model_iter}_pred_h9_error"
+        else:
+            value_col = f"flaml_{city}_{use}_{model_iter}_pred_m2"
+            hover_col = f"flaml_{city}_{use}_{model_iter}_pred_h9_error"
+    elif var_type == "error":
+        if place == "all":
+            value_col = f"flaml_{use}_{model_iter}_pred_h9_error"
+            hover_col = f"flaml_{use}_{model_iter}_pred_m2"
+        else:
+            value_col = f"flaml_{city}_{use}_{model_iter}_pred_h9_error"
+            hover_col = f"flaml_{city}_{use}_{model_iter}_pred_m2"
+    elif var_type == "true":
+        if place == "all": 
+            hover_col = f"flaml_{use}_{model_iter}_pred_m2"
+            if model_iter in ["a3", "a4"]:
+                value_col = f"{target_col}_na"
+            else:
+                value_col = target_col
+        elif place!="all":
+            value_col = target_col
+            hover_col = f"flaml_{city}_{use}_{model_iter}_pred_m2"
 
 if city == "temuco":
     city_name = "Temuco"
@@ -343,6 +377,7 @@ st.markdown("""
         robust to the distribution shape of the target variable and features because they work by splitting data based on 
         thresholds, rather than assuming a specific underlying distribution. 
 """)
+
 
 
 
