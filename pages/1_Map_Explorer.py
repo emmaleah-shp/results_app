@@ -238,7 +238,7 @@ with percentiles:
                 ##### Max: {max(np.abs(df_valid[value_col])):.2f}
                 """)
 
-with guide: 
+# with guide: 
 st.markdown("""
 ### Notes:
 
@@ -343,4 +343,5 @@ st.markdown("""
         robust to the distribution shape of the target variable and features because they work by splitting data based on 
         thresholds, rather than assuming a specific underlying distribution. 
 """)
+
 
