@@ -9,6 +9,12 @@ def load_gdf(place, scale):
     )
 
 @st.cache_data
+def load_base_gdf():
+    return gpd.read_parquet(
+        "data/error_results_all_h10.geoparquet"
+    )
+
+@st.cache_data
 def load_metrics():
     return pd.read_excel("data/model_comparison_results.xlsx") 
 
@@ -25,6 +31,7 @@ def load_feature_summary():
     # df = df.iloc[:, 1:7]
 
     return df
+
 
 
 
