@@ -5,8 +5,7 @@ import plotly.graph_objects as go
 from utils.data_loader import load_gdf
 from utils.constants import MODEL_ITERS, CITIES, USES
 
-st.title("Map & Prediction Explorer")
-# gdf = load_gdf()
+st.title("Map & Prediction Explorer") 
 
 # ---------------- Sidebar ----------------
 st.sidebar.header("Filtros espaciales")
@@ -14,8 +13,13 @@ st.sidebar.header("Filtros espaciales")
 city = st.sidebar.selectbox("City", CITIES)
 scale = st.sidebar.radio("Escala", ["H9", "H10"])
 
-if city == "medellin":
-    
+if city == "medellin" or city == "pucon" or city == "curico":
+    place = "all"
+else: 
+    place = city
+
+gdf = load_gdf(place, scale)
+
 st.sidebar.header("Selección del modelo")
 
 model_iter = st.sidebar.selectbox("Iteración del modelo", MODEL_ITERS) 
@@ -28,33 +32,44 @@ var_type = st.sidebar.radio("Tipo variable", ["error", "predicción", "true"])
 target_col = f"target_{use}_m2"
 
 if var_type == "predicción":
-    if model == "nn" or model == "nn_log":
-        gdf = gdf.assign(c1_nn_m2 = gdf[target_col] - gdf[f"c1_nn_{use}_error"])
-        value_col = "c1_nn_m2"
-        hover_col = f"{model_iter}_nn_pct_{use}_error"
+    if city == "all":
+        value_col = f"flaml_{use}_{iteration}_pred_m2"
+        hover_col = f"flaml_{use}_{iteration}_error"
     else:
-        value_col = f"{model_iter}_{model}_{use}_m2"
-        hover_col = f"{model_iter}_{model}_{use}_error"
+        value_col = f"flaml_{city}_{use}_{iteration}_pred_m2"
+        hover_col = f"flaml_{city}_{use}_{iteration}_error"
 elif var_type == "error":
-    value_col = f"{model_iter}_{model}_{use}_error"
-    if model == "nn" or model == "nn_log":
-        hover_col = f"{model_iter}_nn_pct_{use}_error"
-    else: 
-        hover_col = f"{model_iter}_{model}_{use}_m2"
+    if city == "all":
+        value_col = f"flaml_{use}_{iteration}_error"
+        hover_col = f"flaml_{use}_{iteration}_pred_m2"
+    else:
+        value_col = f"flaml_{city}_{use}_{iteration}_error"
+        hover_col = f"flaml_{city}_{use}_{iteration}_pred_m2"
 elif var_type == "true":
     value_col = target_col
-    hover_col = f"{model_iter}_{model}_{use}_error"
+    if city == "all":
+        hover_col = f"flaml_{use}_{iteration}_pred_m2"
+    else:
+        hover_col = f"flaml_{city}_{use}_{iteration}_pred_m2"
 
-if model == "rf":
-    model_name = "Random Forest"
-elif model == "xgb":
-    model_name = "XGBoost"
-elif model == "lgbm":
-    model_name = "LightGBM"
-elif model == "cat":
-    model_name = "CatBoost"
-elif model == "nn" or model == "nn_log":
-    model_name = "Multilayer Perceptron (red neuronal)"
+if city == "temuco":
+    city_name = "Temuco"
+elif city == "valdivia":
+    city_name = "Valdivia"
+elif city == "osorno":
+    city_name = "Osorno"
+elif city == "losangeles":
+    city_name = "Los Ángeles"
+elif city == "talca":
+    city_name = "Talca"
+elif city == "puertovaras":
+    city_name = "Puerto Varas"
+elif city == "pucon":
+    city_name = "Pucón"
+elif city == "curico":
+    city_name = "Curicó"
+elif city == "medellin":
+    city_name = "Medellín"
 
 
 # ---------------- Filter data ----------------
@@ -142,12 +157,10 @@ with col_map:
 # ---------------- Scatter ----------------
 with col_scatter:
     st.subheader("True vs Predicted")
-    
-    if model == "nn" or model == "nn_log":
-        df_valid = df_valid.assign(c1_nn_m2 = df_valid[target_col] - df_valid[f"c1_nn_{use}_error"])
-        pred_col = "c1_nn_m2"
+    if city == "all":
+        pred_col = f"flaml_{use}_{iteration}_pred_m2"
     else:
-        pred_col = f"{model_iter}_{model}_{use}_m2"
+        pred_col = f"flaml_{city}_{use}_{iteration}_pred_m2"
     
     # Scatter plot
     fig_scatter = px.scatter(
@@ -228,64 +241,6 @@ with percentiles:
                 """)
 
 with guide: 
-    st.markdown(f"""
-                #### Iteraciones - Modelos - Usos
-| **Iteraciones**   | **Modelos**                                                        | **Usos**                             | **Total**    |
-| ----------------- | ------------------------------------------------------------------ | ------------------------------------ | -------------|
-| **A1**            | (4) Decision trees: RandomForest, XGBoost, LightGBM, CatBoost      | (3) Residential, Commercial, Office  | 12           |
-| **A2**            | (4) Decision trees (see above) with variable selection             | (3) Residential, Commercial, Office  | 12           |
-| **A3**            | (4) Decision trees (see above) with outlier elimination            | (3) Residential, Commercial, Office  | 12           |
-| **B1**            | (2) Decision trees: RandomForest & XGBoost                         | (1) Residential                      | 2            |
-| **B1_pruned**     | (2) Decision trees: RandomForest & XGBoost, with parameter tuning  | (1) Residential                      | 2            |
-| **C1**            | (1) MLP: Multilayer Perceptron with transformed variables + LOG    | (2) Residential & Commercial         | 2            |
-| **C2**            | (1) MLP with base variables (no transform) + LOG                   | (2) Residential & Commercial         | 2            |
-                """)
-
-st.divider()
-st.markdown("""
-### Explicación de iteración y modelos:
-
-##### Iteración A#.1 Hierarchical (Hurdle) Random Forest Modeling
-Many hexagons are either almost entirely residential or contain residential use alongside several smaller non-residential components. These two regimes exhibit very different relationships between features and land-use intensity, and treating them with a single regression model leads to systematic bias.
-To address the strong zero-inflation and class imbalance present in the land-use targets, we employ a hierarchical (hurdle) modeling strategy using Random Forests.         
-
-For each land-use category, we first train a binary classifier to predict whether the use is present in a hexagon (m² > 0). This explicitly separates the detection problem (does this use exist here?) from the intensity problem (how much area is present if it exists). This is particularly important for residential use, which is more common overall but still appears alongside other uses in mixed-use hexagons. 
-Conditional on presence, we then train a regression model only on hexagons where the use exists (according to the classifier which reaches over 95% accuracy), predicting the log-transformed built area to reduce skewness and stabilize variance (reduce the influence of extreme values). 
-The final prediction is computed as the probability of presence multiplied by the predicted area, yielding a continuous expected m² value.         
-
-Random Forests are used for both stages because they handle nonlinear relationships, interactions, and heterogeneous spatial features well. They also require minimal preprocessing and are robust in imbalanced and sparse-data settings. Balanced class weights are applied in the classifier to prevent majority residential-only hexagons from overwhelming minority cases, while ensemble size (300 trees) improves stability, while shallow regularization / leaf constraints (min_samples_leaf=2) reduces overfitting in sparse regimes, providing stable yet flexible models.        
-
-##### Iteración A#.2 Hierarchical XGBoost with Residential Dominance Splitting        
-This model extends the basic binary + regression (hurdle) framework by explicitly accounting for residential dominance in two stages.         
-
-In Stage 1, an XGBoost classifier is trained to identify residential-dominant hexagons, defined as hexes where residential built area exceeds the combined area of all other land uses. This is a more informative split than a simple residential presence indicator, as it separates hexagons that are structurally residential from genuinely mixed-use or non-residential contexts. Class imbalance at this stage is addressed through balanced sample weights.        
-
-In Stage 2, we condition on the predicted dominance regime (Stage 1) and train separate regression models for each land-use category. For residential-dominant hexagons, regressors are trained on the residential subset only, allowing the model to learn how secondary land uses (e.g., small commercial or office components) behave within primarily residential environments. For non-residential or mixed hexagons, a separate set of regressors is trained, capturing fundamentally different spatial and functional patterns. Again, all regressors predict log-transformed built area (to reduce skewness and stabilize learning). Sample weights are used to upweight positive (non-zero) observations—especially for sparse uses such as office and commercial in mixed contexts—so that the models focus on learning meaningful signals rather than minimizing error on zeros. If we didn’t do that, the model would learn to predict zero in all cases and would achieve higher “accuracy.”        
-
-Final predictions follow the same hierarchical logic: each test hexagon is first classified as residential-dominant or not, then routed to the corresponding land-use–specific regressor, and finally transformed back to m² space.     
-
-XGBoost is similarly used throughout due to its strong performance on tabular data, ability to model complex nonlinear interactions, and fine-grained control over bias–variance tradeoffs via depth, learning rate, and subsampling.         
-
-##### Iteración A#.3 Hierarchical LightGBM (Binary + Regression)        
-This model follows the same two-stage hierarchical (hurdle) structure as RandomForest (A#.1), where each land-use category is modeled independently using a binary classifier for presence/absence and a regressor for built-area magnitude. In the first stage, a LightGBM classifier predicts whether a given land use is present in a hexagon. In the second stage, a LightGBM regressor is trained only on positive samples to predict log-transformed built area, which is then converted back to m² space.        
-
-Compared to the first Random Forest model, this approach replaces bagged trees with gradient-boosted decision trees, allowing for more efficient learning of complex nonlinear interactions with fewer trees and better handling of feature interactions. Unlike XGBoost, this model does not introduce an additional residential-dominance split; instead, it treats all hexagons uniformly within each land-use–specific model. This makes Model A#.3 simpler and more directly comparable to the baseline hierarchical approach, while leveraging LightGBM’s speed and regularization to improve performance and scalability.
-
-##### Iteración A#.4 — Hierarchical CatBoost (Binary + Regression)        
-This model preserves the same two-stage hierarchical structure used in Models A#.1 and A#.3, with a binary classification stage to predict land-use presence followed by a regression stage to estimate built area conditional on presence. For each land-use category, a CatBoost classifier first estimates the probability that the use exists in a hexagon, and a CatBoost regressor is then trained on positive samples to predict log-transformed built area, which is converted back to square meters at inference time.        
-
-Relative to Random Forest and LightGBM, CatBoost introduces ordered boosting and symmetric tree structures, which improve robustness to overfitting and reduce sensitivity to feature scaling and noisy predictors. Class weights are explicitly applied in the classification stage to emphasize positive (present) samples, while the regression stage focuses on learning conditional magnitude. This model serves as a strong gradient-boosted baseline that retains the interpretability and modularity of the hierarchical framework while offering improved stability in heterogeneous feature spaces.        
-
-| Model ID | Model Type    | Hierarchical Strategy                            | Key Stages                                                                                            | Strengths                                                                      | Limitations                                                                                       |
-| -------- | ------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
-| **A#.1** | Random Forest | Binary → Regression (per use)                    | (1) RF classifier for presence<br>(2) RF regressor on log(m²) for positives                           | Simple, interpretable, robust baseline<br>Handles nonlinearities well          | Less efficient at modeling complex interactions<br>Can underperform with many correlated features |
-| **A#.2** | XGBoost       | Residential dominance split + per-use regression | (1) Classify residential dominance<br>(2) Separate regressors for residential-dominant vs mixed hexes | Explicitly encodes land-use hierarchy<br>Addresses residential underestimation | Most complex pipeline<br>Higher risk of error propagation                                         |
-| **A#.3** | LightGBM      | Binary → Regression (per use)                    | (1) LGBM classifier for presence<br>(2) LGBM regressor on log(m²)                                     | Fast, scalable, strong performance<br>Efficient gradient boosting              | Less interpretable than RF<br>No explicit residential hierarchy                                   |
-| **A#.4** | CatBoost      | Binary → Regression (per use)                    | (1) CatBoost classifier with class weights<br>(2) CatBoost regressor on log(m²)                       | Robust to noisy features<br>Stable training, minimal preprocessing             | Slower than LightGBM<br>Less transparent model internals                                          |
-
-""")
-
-
 st.markdown("""
 ### Notes:
 
@@ -306,82 +261,91 @@ st.markdown("""
         See Feature Explorer for more details.
 
 ##### Outlier Elimination (A3 and A4): 
-        - hexagons["target_commercial_m2"] <= 10000] # 99.495 percentile
-        - hexagons["target_office_m2"] <= 5000] # 99.751 percentile
-        - hexagons["target_residential_m2"] <= 8250] #99.02 percentile
+    - hexagons["target_commercial_m2"] <= 10000] # 99.495 percentile
+    - hexagons["target_office_m2"] <= 5000] # 99.751 percentile
+    - hexagons["target_residential_m2"] <= 8250] #99.02 percentile
+    - hexagons["target_commercial_office_m2"] <= 10500] #99.45 percentile
 
-    Stats pre-outlier elimination:
-        N of TEST cells: 2749        
-        N of train cells: 10928        
-        Total cells: 13677        
-        =========RESIDENTIAL=======================================
-        Average area for target_residential_m2 TEST cells: 1305.72
-        Average area for target_residential_m2 train cells: 1327.23
-        Average area for target_residential_m2 TEST cells EXCLUDING 0s: 1990.81
-        Average area for target_residential_m2 train cells EXCLUDING 0s: 8044.35
-        N of cells with target_residential_m2 > 0 in TEST: 1803, or 65.587%
-        N of cells with target_residential_m2 > 0 in train: 6971, or 63.790%
-        =========COMMERCIAL=======================================
-        Average area for target_commercial_m2 TEST cells: 252.93
-        Average area for target_commercial_m2 train cells: 291.62
-        Average area for target_commercial_m2 TEST cells EXCLUDING 0s: 1671.40
-        Average area for target_commercial_m2 train cells EXCLUDING 0s: 7660.54
-        N of cells with target_commercial_m2 > 0 in TEST: 416, or 15.133%
-        N of cells with target_commercial_m2 > 0 in train: 1881, or 17.213%
-        =========OFFICE=======================================
-        Average area for target_office_m2 TEST cells: 53.94
-        Average area for target_office_m2 train cells: 63.28
-        Average area for target_office_m2 TEST cells EXCLUDING 0s: 1029.67
-        Average area for target_office_m2 train cells EXCLUDING 0s: 4801.90
-        N of cells with target_office_m2 > 0 in TEST: 144, or 5.238%
-        N of cells with target_office_m2 > 0 in train: 673, or 6.158%
-    
-    Stats post-outlier elimination:
-        N of TEST cells: 2708        
-        N of train cells: 10737        
-        Total cells: 13445        
-        =========RESIDENTIAL=======================================
-        Average area for target_residential_m2 TEST cells: 1231.76
-        Average area for target_residential_m2 train cells: 1218.30
-        Average area for target_residential_m2 TEST cells EXCLUDING 0s: 1880.27
-        Average area for target_residential_m2 train cells EXCLUDING 0s: 7373.68
-        N of cells with target_residential_m2 > 0 in TEST: 1774, or 65.510%
-        N of cells with target_residential_m2 > 0 in train: 6807, or 63.398%
-        =========COMMERCIAL=======================================
-        Average area for target_commercial_m2 TEST cells: 138.39
-        Average area for target_commercial_m2 train cells: 180.51
-        Average area for target_commercial_m2 TEST cells EXCLUDING 0s: 958.48 *
-        Average area for target_commercial_m2 train cells EXCLUDING 0s: 4956.80 *
-        N of cells with target_commercial_m2 > 0 in TEST: 391, or 14.439%
-        N of cells with target_commercial_m2 > 0 in train: 1750, or 16.299%
-        =========OFFICE=======================================
-        Average area for target_office_m2 TEST cells: 30.46
-        Average area for target_office_m2 train cells: 39.02
-        Average area for target_office_m2 TEST cells EXCLUDING 0s: 634.48 *
-        Average area for target_office_m2 train cells EXCLUDING 0s: 3223.03 *
-        N of cells with target_office_m2 > 0 in TEST: 130, or 4.801%
-        N of cells with target_office_m2 > 0 in train: 601, or 5.597%    
+| Metric | Pre-Outlier Removal | Post-Outlier Removal |
+|------|------|------|
+| Test Cells | 4851 | 4787 |
+| Train Cells | 19299 | 19014 |
+| Total Cells | 24150 | 23801 |
 
-##### B1 Parameter choices: 
-        - RandomizedSearchCV
-        - Keep raw target, use Tweedie which explicitly models mass at 0 and continuous positive variables
-        - shallow trees with a smaller learning rate
-        - subsampling to help with correlated but different vars like POIs and spatial redundancy
-        - SUGGESTED BUT NOT TAKEN: feature transform / regularization
+---
 
-##### Permutation Importance:
-        Scikit-learn's permutation importance is a model inspection technique that measures the contribution of
-        each feature to a fitted model’s statistical performance on a given dataset. This technique is particularly
-        useful for non-linear or opaque estimators, and involves randomly shuffling the values of a single feature
-        and observing the resulting degradation of the model’s score. By breaking the relationship between the
-        feature and the target, we determine how much the model relies on such particular feature.
-        (Source: https://scikit-learn.org/stable/modules/permutation_importance.html)
-        
+## Residential
+
+| Metric | Pre Test | Post Test | Pre Train | Post Train |
+|------|------|------|------|------|
+| Avg Area (m²) | 1317.71 | 1224.33 | 1260.77 | 1174.16 |
+| Avg Area Excluding 0s (m²) | 1947.06 | 1814.51 | 7411.40 | 6911.91 |
+| Cells > 0 | 3283 (67.677%) | 3230 (67.474%) | 12271 (63.584%) | 12033 (63.285%) |
+
+---
+
+## Commercial
+
+| Metric | Pre Test | Post Test | Pre Train | Post Train |
+|------|------|------|------|------|
+| Avg Area (m²) | 215.86 | 156.82 | 257.07 | 156.22 |
+| Avg Area Excluding 0s (m²) | 1342.48 | 1010.34 | 6360.40 | 3997.76 |
+| Cells > 0 | 780 (16.079%) | 743 (15.521%) | 3080 (15.959%) | 2895 (15.226%) |
+
+---
+
+## Office
+
+| Metric | Pre Test | Post Test | Pre Train | Post Train |
+|------|------|------|------|------|
+| Avg Area (m²) | 52.46 | 35.96 | 57.85 | 35.46 |
+| Avg Area Excluding 0s (m²) | 912.05 | 659.57 | 4001.36 | 2583.22 |
+| Cells > 0 | 279 (5.751%) | 261 (5.452%) | 1068 (5.534%) | 968 (5.091%) |
+
+---
+
+## Commercial + Office
+
+| Metric | Pre Test | Post Test | Pre Train | Post Train |
+|------|------|------|------|------|
+| Avg Area (m²) | 183.63 | 192.78 | 188.72 | 191.68 |
+| Avg Area Excluding 0s (m²) | 1032.08 | 1079.34 | 4215.53 | 4262.64 |
+| Cells > 0 | 851 (17.792%) | 855 (17.861%) | 3238 (17.034%) | 3243 (17.056%) |
+
+---
+
+## Total Built Area
+
+| Metric | Pre Test | Post Test | Pre Train | Post Train |
+|------|------|------|------|------|
+| Avg Area (m²) | 2044.43 | 1844.50 | 1975.09 | 1722.47 |
+| Avg Area Excluding 0s (m²) | 2752.57 | 2494.95 | 10579.30 | 9254.33 |
+| Cells > 0 | 3603 (74.273%) | 3539 (73.929%) | 13419 (69.532%) | 13134 (69.075%) |
+
+## Medellín
+
+| Land use | Metric | Total |
+|------|------|------|
+| Residential | Avg Area (m²) | 6039.39 | 
+| Residential | Avg Area Excluding 0s (m²) | 7706.66 |
+| Residential | Cells > 0 | 5716 (78.366%) |
+| Commercial + Office | Avg Area (m²) | 1412.83 | 
+| Commercial + Office | Avg Area Excluding 0s (m²) | 2554.58 |
+| Commercial + Office | Cells > 0 | 4034 (55.306%) |
+| Industrial | Avg Area (m²) | 359.79 | 
+| Industrial | Avg Area Excluding 0s (m²) | 1782.81 |
+| Industrial | Cells > 0 | 1472 (20.181%) |
+| Total | Avg Area (m²) | 12835.73 | 
+| Total | Avg Area Excluding 0s (m²) | 13313.96 |
+| Total | Cells > 0 | 7032 (96.408%) |
+
+---
 ##### Decision Trees:
         Tree-based Models (Random Forests, Gradient Boosting Machines like XGBoost, LightGBM): These models are generally 
         robust to the distribution shape of the target variable and features because they work by splitting data based on 
         thresholds, rather than assuming a specific underlying distribution. 
 """)
+
 
 
 
