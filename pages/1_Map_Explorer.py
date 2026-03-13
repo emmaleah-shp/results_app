@@ -125,11 +125,13 @@ percentiles, guide = st.columns([0.35, 0.65])
 with col_map:
     st.subheader("Distribución espacial")
     st.markdown(f"###### Modeling _{value_col}_")
-    max_abs = max(
-        abs(df_valid[value_col].min()),
-        abs(df_valid[value_col].max()),
+    # max_abs = max(
+    #     abs(df_valid[value_col].min()),
+    #     abs(df_valid[value_col].max()),
+    # ) 
+    max_abs = np.percentile(
+        abs(df_valid[value_col]), 99
     )
-
 
     fig_map = px.choropleth_mapbox(
         df_valid,
@@ -377,6 +379,7 @@ st.markdown("""
         robust to the distribution shape of the target variable and features because they work by splitting data based on 
         thresholds, rather than assuming a specific underlying distribution. 
 """)
+
 
 
 
