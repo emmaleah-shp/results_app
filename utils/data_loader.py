@@ -24,8 +24,8 @@ def load_gdf_features():
 
 @st.cache_data
 def load_feature_summary():
-    df = pd.read_csv(
-        "data/feature_summary_for_team.csv"
+    df = pd.read_excel(
+        "data/feature_selection.xlsx"
     )
     
     # df = df.iloc[:, 1:7]
