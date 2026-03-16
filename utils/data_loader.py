@@ -20,7 +20,7 @@ def load_metrics():
 
 @st.cache_data
 def load_gdf_features():
-    return gpd.read_parquet("data/hex_features_explore_1.geoparquet")
+    return gpd.read_parquet("data/hex_features_explore.geoparquet")
 
 @st.cache_data
 def load_feature_summary():
