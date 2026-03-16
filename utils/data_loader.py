@@ -16,7 +16,7 @@ def load_base_gdf():
 
 @st.cache_data
 def load_metrics():
-    return pd.read_excel("data/model_comparison_results.xlsx") 
+    return pd.read_excel("data/final_model_metrics.xlsx") 
 
 @st.cache_data
 def load_gdf_features():
