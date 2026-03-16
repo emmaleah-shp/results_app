@@ -6,4 +6,4 @@ pandas
 pyarrow
 geopandas
 scipy
-
+openpyxl
