@@ -19,11 +19,18 @@ st.title("Explorador de variables")
 
 cities = sorted(gdf["city"].dropna().unique()) 
 
-# FEATURE_COLS = [c for c in gdf.columns if c.startswith("feat_") | c.startswith("target_")]
-fcol = feat_summary.loc[feat_summary["select"] == 1, "feature_name"].tolist()
-FEATURE_COLS = [c for c in fcol if c.startswith("feat_") | c.startswith("target_")]
+selection = st.radio("Incluye columnas eliminadas", ["No", "Sí"])
+
+if selection =="No": 
+    fcol = feat_summary.loc[feat_summary["select"] == 1, "feature_name"].tolist()
+    FEATURE_COLS = [c for c in fcol if c.startswith("feat_") | c.startswith("target_")]
+else: 
+    FEATURE_COLS = [c for c in gdf.columns if c.startswith("feat_") | c.startswith("target_")]
+    
 transform_cols = [c for c in gdf.columns if c.startswith("log_") | c.startswith("lisa_")]
 feature_col = st.selectbox("Feature", FEATURE_COLS) 
+
+
 feat_row = feat_summary.loc[
     feat_summary["feature_name"] == feature_col
 ]
