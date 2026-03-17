@@ -8,16 +8,12 @@ st.title("Model Performance Metrics")
 
 use = st.selectbox("Uso del suelo", sorted(metrics["land_use"].unique()))
 
+cty = st.selectbox("Prueba", sorted(metrics["city"].unique()))
+
 iteration = st.multiselect(
     "Iteración",
     sorted(metrics["iteration"].unique()),
     default=sorted(metrics["iteration"].unique())
-)
-
-cty = st.multiselect(
-    "Prueba",
-    sorted(metrics["city"].unique()),
-    default=sorted(metrics["city"].unique())
 )
 
 scale = st.multiselect(
@@ -28,8 +24,8 @@ scale = st.multiselect(
 
 df = metrics[
     (metrics["land_use"] == use) &
+    (metrics["city"] == cty) & 
     (metrics["iteration"].isin(iteration)) &
-    (metrics["city"].isin(cty)) & 
     (metrics["scale"].isin(scale)) 
 ]
 
@@ -39,31 +35,31 @@ barshow = st.selectbox("Ver estadística", ["Log R2", "R2","MAE"])
 if barshow =="Log R2": 
     fig = px.bar(
         df,
-        x="use",
+        x="scale",
         y="log_r2",
         color="iteration",
         barmode="group",
-        title="Log R2 by Model and Iteration",
+        title="Log R2 by Scale and Iteration",
     )
     
 elif barshow =="MAE": 
     fig = px.bar(
         df,
-        x="use",
+        x="scale",
         y="mae",
         color="iteration",
         barmode="group",
-        title="MAE by Model and Iteration",
+        title="MAE by Scale and Iteration",
     )
     
 elif barshow =="R2": 
     fig = px.bar(
         df,
-        x="use",
+        x="scale",
         y="r2",
         color="iteration",
         barmode="group",
-        title="R2 by Model and Iteration",
+        title="R2 by Scale and Iteration",
     )
 
 st.plotly_chart(fig, use_container_width=True)
