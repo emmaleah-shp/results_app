@@ -32,12 +32,21 @@ df = metrics[
 st.dataframe(df.sort_values("mae"), use_container_width=True)
 
 barshow = st.selectbox("Ver estadística", ["Log R2", "R2","MAE", "RMSE", "Bias"])
+vista = st.selectbox("Vista", ["Escala", "Iteración"])
+
+if vista == "Escala":
+    x_col = "scale"
+    z_color = "iteration"
+elif vista == "Iteración":
+    x_col = "iteration"
+    z_color = "scale"
+
 if barshow =="Log R2": 
     fig = px.bar(
         df,
-        x="iteration",
+        x=x_col,
         y="log_r2",
-        color="scale",
+        color=z_color,
         barmode="group",
         title="Log R2 by Scale and Iteration",
     )
@@ -45,9 +54,9 @@ if barshow =="Log R2":
 elif barshow =="MAE": 
     fig = px.bar(
         df,
-        x="iteration",
+        x=x_col,
         y="mae",
-        color="scale",
+        color=z_color,
         barmode="group",
         title="MAE by Scale and Iteration",
     )
@@ -55,9 +64,9 @@ elif barshow =="MAE":
 elif barshow =="R2": 
     fig = px.bar(
         df,
-        x="iteration",
+        x=x_col,
         y="r2",
-        color="scale",
+        color=z_color,
         barmode="group",
         title="R2 by Scale and Iteration",
     )
@@ -65,9 +74,9 @@ elif barshow =="R2":
 elif barshow =="RMSE": 
     fig = px.bar(
         df,
-        x="iteration",
+        x=x_col,
         y="rmse",
-        color="scale",
+        color=z_color,
         barmode="group",
         title="RMSE by Scale and Iteration",
     )
@@ -75,9 +84,9 @@ elif barshow =="RMSE":
 elif barshow =="Bias": 
     fig = px.bar(
         df,
-        x="iteration",
+        x=x_col,
         y="bias",
-        color="scale",
+        color=z_color,
         barmode="group",
         title="Bias by Scale and Iteration",
     )
