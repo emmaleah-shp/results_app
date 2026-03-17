@@ -222,15 +222,10 @@ category = st.multiselect(
     default=sorted(feat_summary["category"].unique())
 ) 
 
-selection = st.multiselect(
-    "Variable seleccionado",
-    sorted(feat_summary["feature_type"].unique()),
-    default=sorted(feat_summary["feature_type"].unique())
-) 
-selection = st.radio("Incluye columnas eliminadas", ["Sí", "No"], horizontal=True)
-if selection == "No":
+slct = st.radio("Incluye columnas eliminadas", ["Sí", "No"], horizontal=True)
+if slct == "No":
     selection1 = [1]
-elif selection == "Yes":
+elif slct == "Yes":
     selection1 = [1,0]
 
 fs = feat_summary[
