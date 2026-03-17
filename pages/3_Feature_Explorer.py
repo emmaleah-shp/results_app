@@ -19,7 +19,7 @@ st.title("Explorador de variables")
 
 cities = sorted(gdf["city"].dropna().unique()) 
 
-selection = st.radio("Incluye columnas eliminadas", ["No", "Sí"])
+selection = st.radio("Incluye columnas eliminadas", ["No", "Sí"], horizontal=True)
 
 if selection =="No": 
     fcol = feat_summary.loc[feat_summary["select"] == 1, "feature_name"].tolist()
