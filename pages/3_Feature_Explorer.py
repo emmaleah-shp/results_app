@@ -216,8 +216,27 @@ type = st.multiselect(
     default=sorted(feat_summary["feature_type"].unique())
 ) 
 
+category = st.multiselect(
+    "Categoría de variable",
+    sorted(feat_summary["category"].unique()),
+    default=sorted(feat_summary["category"].unique())
+) 
+
+selection = st.multiselect(
+    "Variable seleccionado",
+    sorted(feat_summary["feature_type"].unique()),
+    default=sorted(feat_summary["feature_type"].unique())
+) 
+selection = st.radio("Incluye columnas eliminadas", ["Sí", "No"], horizontal=True)
+if selection == "No":
+    selection1 = [1]
+elif selection == "Yes":
+    selection1 = [1,0]
+
 fs = feat_summary[
-    (feat_summary["feature_type"].isin(type))
+    (feat_summary["feature_type"].isin(type)) &
+    (feat_summary["feature_type"].isin(category)) & 
+    (feat_summary["feature_type"].isin(selection1))
 ]
 
 st.dataframe(fs.sort_values("index"), use_container_width=True)
