@@ -35,9 +35,9 @@ barshow = st.selectbox("Ver estadística", ["Log R2", "R2","MAE"])
 if barshow =="Log R2": 
     fig = px.bar(
         df,
-        x="scale",
+        x="iteration",
         y="log_r2",
-        color="iteration",
+        color="scale",
         barmode="group",
         title="Log R2 by Scale and Iteration",
     )
@@ -45,9 +45,9 @@ if barshow =="Log R2":
 elif barshow =="MAE": 
     fig = px.bar(
         df,
-        x="scale",
+        x="iteration",
         y="mae",
-        color="iteration",
+        color="scale",
         barmode="group",
         title="MAE by Scale and Iteration",
     )
@@ -55,9 +55,9 @@ elif barshow =="MAE":
 elif barshow =="R2": 
     fig = px.bar(
         df,
-        x="scale",
+        x="iteration",
         y="r2",
-        color="iteration",
+        color="scale",
         barmode="group",
         title="R2 by Scale and Iteration",
     )
