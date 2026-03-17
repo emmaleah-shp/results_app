@@ -3,147 +3,147 @@ import plotly.express as px
 from utils.data_loader import load_metrics
 
 
-st.title("Model Selected: Light GBM")
+st.title("Modelo Seleccionado: Light GBM")
 
 st.markdown("""
-## Model Overview: Hierarchical LightGBM Regression
+## Descripción del Modelo: Regresión Jerárquica con LightGBM
 
-### Purpose
-This model estimates built area (m²) by land-use category at the hexagon level.  
-Many hexagons contain **no area for a given land use**, while others contain **highly skewed, continuous values**.  
-To address this, the model separates **presence detection** from **area estimation** using a hierarchical approach.
+### Propósito
+Este modelo estima el área construida (m²) por categoría de uso de suelo a nivel de hexágono.  
+Muchos hexágonos **no contienen área para un uso de suelo dado**, mientras que otros presentan **valores continuos con alta asimetría**.  
+Para abordar esto, el modelo separa la **detección de presencia** de la **estimación de área** mediante un enfoque jerárquico.
 
 ---
 
-### Model Architecture
+### Arquitectura del Modelo
 
-For each land-use category, the model is trained in **two stages**:
+Para cada categoría de uso de suelo, el modelo se entrena en **dos etapas**:
 
-**1. Presence Detection (Binary Classification)**  
-- Predicts whether a land use is present in a hexagon (m² > 0)
-- Handles strong class imbalance and zero-inflation
-- Outputs a probability of presence
+**1. Detección de Presencia (Clasificación Binaria)**  
+- Predice si un uso de suelo está presente en un hexágono (m² > 0)
+- Maneja el fuerte desbalance de clases y la inflación de ceros
+- Entrega una probabilidad de presencia
 
-**2. Area Estimation (Conditional Regression)**  
-- Trained only on hexagons where the land use exists
-- Predicts log-transformed built area
-- Log transformation reduces skewness and limits the influence of extreme values
+**2. Estimación de Área (Regresión Condicional)**  
+- Entrenado solo en hexágonos donde el uso de suelo existe
+- Predice el área construida transformada logarítmicamente
+- La transformación logarítmica reduce la asimetría y limita la influencia de valores extremos
 
-**Final Prediction**  
-The expected built area is computed as:
+**Predicción Final**  
+El área construida esperada se calcula como:
 
 """)
 
 st.divider()
 st.markdown(""" 
 
-This yields a continuous estimate while preserving realistic sparsity.
+Esto produce una estimación continua preservando una dispersión realista.
 
 ---
 
-### Why LightGBM?
+### ¿Por qué LightGBM?
 
-LightGBM is well suited to this problem because it:
+LightGBM es adecuado para este problema porque:
 
-- Efficiently learns **nonlinear relationships and feature interactions**
-- Handles **sparse and imbalanced targets** effectively
-- Scales well when training **separate models per land-use category**
-- Includes regularization to reduce overfitting in high-dimensional feature spaces
+- Aprende eficientemente **relaciones no lineales e interacciones entre variables**
+- Maneja eficazmente **objetivos dispersos y desbalanceados**
+- Escala bien al entrenar **modelos separados por categoría de uso de suelo**
+- Incluye regularización para reducir el sobreajuste en espacios de alta dimensionalidad
 
-Compared to bagged tree methods, gradient boosting achieves similar or better accuracy with fewer trees and lower computational cost.
-
----
-
-### Simplified Model Behavior
-
-In plain terms, the model:
-
-- First asks **“Does this land use exist here?”**
-- If yes, estimates **“How much area does it occupy?”**
-- Applies the same logic consistently across all hexagons
-- Limits the influence of extreme values
-- Produces interpretable, stable predictions for mixed-use areas
+En comparación con métodos de árboles con bagging, el gradient boosting logra precisión similar o superior con menos árboles y menor costo computacional.
 
 ---
 
-### Model Variants Considered
+### Comportamiento Simplificado del Modelo
 
-| Model ID | Model Type | Hierarchical Strategy | Strengths | Limitations |
+En términos simples, el modelo:
+
+- Primero pregunta **"¿Existe este uso de suelo aquí?"**
+- Si es así, estima **"¿Cuánta área ocupa?"**
+- Aplica la misma lógica de forma consistente en todos los hexágonos
+- Limita la influencia de valores extremos
+- Produce predicciones interpretables y estables para áreas de uso mixto
+
+---
+
+### Variantes de Modelo Consideradas
+
+| ID Modelo | Tipo de Modelo | Estrategia Jerárquica | Fortalezas | Limitaciones |
 |--------|-----------|----------------------|-----------|-------------|
-| A#.1 | Random Forest | Binary → Regression | Simple, interpretable baseline | Less efficient for complex interactions |
-| A#.2 | XGBoost | Residential dominance split | Encodes explicit hierarchy | Most complex pipeline |
-| **A#.3** | **LightGBM** | **Binary → Regression** | **Fast, scalable, stable** | **Less interpretable than RF** |
-| A#.4 | CatBoost | Binary → Regression | Robust to noisy features | Slower, less transparent |
+| A#.1 | Random Forest | Binario → Regresión | Línea base simple e interpretable | Menos eficiente para interacciones complejas |
+| A#.2 | XGBoost | División por dominancia residencial | Codifica jerarquía explícita | Pipeline más complejo |
+| **A#.3** | **LightGBM** | **Binario → Regresión** | **Rápido, escalable, estable** | **Menos interpretable que RF** |
+| A#.4 | CatBoost | Binario → Regresión | Robusto ante variables ruidosas | Más lento, menos transparente |
 
 ---
 
-### Design Rationale
+### Justificación del Diseño
 
-The LightGBM hierarchical model was selected to balance:
+El modelo jerárquico con LightGBM fue seleccionado para equilibrar:
 
-- Modeling accuracy
-- Computational efficiency
-- Pipeline simplicity
-- Reproducibility across land-use categories
+- Precisión del modelo
+- Eficiencia computacional
+- Simplicidad del pipeline
+- Reproducibilidad entre categorías de uso de suelo
 
-This structure avoids unnecessary branching while explicitly addressing zero-inflation and mixed-use hexagons.
+Esta estructura evita ramificaciones innecesarias mientras aborda explícitamente la inflación de ceros y los hexágonos de uso mixto.
 """)
+
 st.divider()
 st.markdown(""" 
-### Hyperparameter Optimization with FLAML
+### Optimización de Hiperparámetros con FLAML
 
-Model performance and stability depend not only on the model structure, but also on the choice of hyperparameters (e.g., tree depth, learning rate, number of leaves).  
-To avoid manual tuning and to ensure reproducibility, hyperparameter selection is handled automatically using **FLAML**.
-
----
-
-#### What FLAML Does
-
-FLAML (Fast Lightweight AutoML) performs **automated hyperparameter search** with a focus on:
-
-- Efficient exploration of the hyperparameter space
-- Strong performance under limited time or compute budgets
-- Avoiding overfitting through early stopping and adaptive search
-
-Rather than exhaustively searching all parameter combinations, FLAML prioritizes promising configurations based on observed performance, allowing it to converge quickly to well-performing settings.
+El rendimiento y la estabilidad del modelo dependen no solo de la estructura del modelo, sino también de la elección de los hiperparámetros (p. ej., profundidad de árboles, tasa de aprendizaje, número de hojas).  
+Para evitar la sintonización manual y garantizar la reproducibilidad, la selección de hiperparámetros se realiza automáticamente mediante **FLAML**.
 
 ---
 
-#### How FLAML Is Used in This Pipeline
+#### Qué hace FLAML
 
-For each LightGBM model (classifier and regressor):
+FLAML (Fast Lightweight AutoML) realiza una **búsqueda automatizada de hiperparámetros** con énfasis en:
 
-- FLAML searches over a predefined range of LightGBM hyperparameters
-- Model performance is evaluated using cross-validation on the training data
-- Poor-performing configurations are discarded early
-- The best-performing configuration is selected and fixed for training
+- Exploración eficiente del espacio de hiperparámetros
+- Alto rendimiento bajo presupuestos limitados de tiempo o cómputo
+- Evitar el sobreajuste mediante parada temprana y búsqueda adaptativa
 
-This process is applied independently for:
-- Presence (binary classification) models
-- Conditional area (regression) models
+En lugar de buscar exhaustivamente todas las combinaciones de parámetros, FLAML prioriza configuraciones prometedoras basándose en el rendimiento observado, lo que le permite converger rápidamente hacia configuraciones de buen desempeño.
 
 ---
 
-#### Why FLAML Was Chosen
+#### Cómo se usa FLAML en este Pipeline
 
-FLAML was selected because it:
+Para cada modelo LightGBM (clasificador y regresor):
 
-- Reduces the need for manual hyperparameter tuning
-- Produces consistent and reproducible model configurations
-- Is computationally efficient compared to grid or random search
-- Integrates directly with LightGBM
+- FLAML busca sobre un rango predefinido de hiperparámetros de LightGBM
+- El rendimiento del modelo se evalúa mediante validación cruzada en los datos de entrenamiento
+- Las configuraciones de bajo rendimiento se descartan tempranamente
+- La configuración de mejor rendimiento se selecciona y fija para el entrenamiento
 
-This allows the modeling pipeline to focus on **structure and data design**, while hyperparameter tuning is handled in a principled and automated way.
+Este proceso se aplica de forma independiente para:
+- Modelos de presencia (clasificación binaria)
+- Modelos de área condicional (regresión)
 
 ---
 
-#### Simplified Explanation
+#### Por qué se eligió FLAML
 
-In simple terms:
+FLAML fue seleccionado porque:
 
-- FLAML automatically tests different LightGBM settings
-- Keeps the ones that work well
-- Stops searching once further improvements are unlikely
-- Ensures the final model is well-tuned without excessive trial-and-error
+- Reduce la necesidad de sintonización manual de hiperparámetros
+- Produce configuraciones de modelo consistentes y reproducibles
+- Es computacionalmente eficiente en comparación con búsqueda en grilla o aleatoria
+- Se integra directamente con LightGBM
+
+Esto permite que el pipeline de modelado se enfoque en el **diseño de estructura y datos**, mientras que la sintonización de hiperparámetros se maneja de forma fundamentada y automatizada.
+
+---
+
+#### Explicación Simplificada
+
+En términos simples:
+
+- FLAML prueba automáticamente diferentes configuraciones de LightGBM
+- Conserva las que funcionan bien
+- Detiene la búsqueda una vez que mejoras adicionales son poco probables
+- Garantiza que el modelo final esté bien ajustado sin excesivo ensayo y error
 """)
-
