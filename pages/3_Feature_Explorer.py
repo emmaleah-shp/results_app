@@ -230,8 +230,8 @@ elif slct == "Yes":
 
 fs = feat_summary[
     (feat_summary["feature_type"].isin(type)) &
-    (feat_summary["feature_type"].isin(category)) & 
-    (feat_summary["feature_type"].isin(selection1))
+    (feat_summary["category"].isin(category)) & 
+    (feat_summary["select"].isin(selection1))
 ]
 
 st.dataframe(fs.sort_values("index"), use_container_width=True)
