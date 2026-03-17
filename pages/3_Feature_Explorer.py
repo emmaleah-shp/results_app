@@ -220,7 +220,7 @@ fs = feat_summary[
     (feat_summary["feature_type"].isin(type))
 ]
 
-st.dataframe(fs.sort_values("coverage_pct"), use_container_width=True)
+st.dataframe(fs.sort_values("index"), use_container_width=True)
 
 
 
