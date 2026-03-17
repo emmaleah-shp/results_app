@@ -29,8 +29,8 @@ scale = st.multiselect(
 df = metrics[
     (metrics["land_use"] == use) &
     (metrics["iteration"].isin(iteration)) &
-    (metrics["city"] == cty) & 
-    (metrics["scale"] == scale) 
+    (metrics["city"].isin(cty)) & 
+    (metrics["scale"].isin(scale)) 
 ]
 
 st.dataframe(df.sort_values("mae"), use_container_width=True)
