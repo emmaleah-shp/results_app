@@ -31,7 +31,7 @@ df = metrics[
 
 st.dataframe(df.sort_values("mae"), use_container_width=True)
 
-barshow = st.selectbox("Ver estadística", ["Log R2", "R2","MAE"])
+barshow = st.selectbox("Ver estadística", ["Log R2", "R2","MAE", "RMSE", "Bias"])
 if barshow =="Log R2": 
     fig = px.bar(
         df,
@@ -60,6 +60,26 @@ elif barshow =="R2":
         color="scale",
         barmode="group",
         title="R2 by Scale and Iteration",
+    )
+        
+elif barshow =="RMSE": 
+    fig = px.bar(
+        df,
+        x="iteration",
+        y="rmse",
+        color="scale",
+        barmode="group",
+        title="RMSE by Scale and Iteration",
+    )
+
+elif barshow =="Bias": 
+    fig = px.bar(
+        df,
+        x="iteration",
+        y="bias",
+        color="scale",
+        barmode="group",
+        title="Bias by Scale and Iteration",
     )
 
 st.plotly_chart(fig, use_container_width=True)
