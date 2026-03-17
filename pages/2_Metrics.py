@@ -20,10 +20,17 @@ cty = st.multiselect(
     default=sorted(metrics["city"].unique())
 )
 
+scale = st.multiselect(
+    "Escala",
+    sorted(metrics["scale"].unique()),
+    default=sorted(metrics["scale"].unique())
+)
+
 df = metrics[
     (metrics["land_use"] == use) &
-    (metrics["iteration"] == iteration) &
-    (metrics["city"] == cty)
+    (metrics["iteration"].isin(iteration)) &
+    (metrics["city"] == cty) & 
+    (metrics["scale"] == scale) 
 ]
 
 st.dataframe(df.sort_values("mae"), use_container_width=True)
