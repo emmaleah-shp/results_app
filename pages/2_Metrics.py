@@ -14,9 +14,16 @@ iteration = st.multiselect(
     default=sorted(metrics["iteration"].unique())
 )
 
+cty = st.multiselect(
+    "Prueba",
+    sorted(metrics["city"].unique()),
+    default=sorted(metrics["city"].unique())
+)
+
 df = metrics[
     (metrics["land_use"] == use) &
-    (metrics["iteration"].isin(iteration))
+    (metrics["iteration"] == iteration) &
+    (metrics["city"] == cty)
 ]
 
 st.dataframe(df.sort_values("mae"), use_container_width=True)
