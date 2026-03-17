@@ -225,7 +225,7 @@ category = st.multiselect(
 slct = st.radio("Incluye columnas eliminadas", ["Sí", "No"], horizontal=True)
 if slct == "No":
     selection1 = ["1"]
-elif slct == "Yes":
+elif slct == "Sí":
     selection1 = ["1","0"]
 
 fs = feat_summary[
